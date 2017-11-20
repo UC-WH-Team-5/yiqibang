@@ -1,0 +1,179 @@
+*{
+    margin:0;
+    padding:0;
+}
+.clear{
+    overflow: hidden;
+    zoom: 1;
+}
+body{
+    background: #f2f1ef;
+}
+
+/*头部*/
+#header{
+    width:1600px;
+    height:32px;
+    background: #000;
+}
+#header .left{
+    float: left;
+    width:480px;
+}
+
+#header .left li a{
+    padding:5px 5px;
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #FFFFFF;
+    text-align: justify;
+}
+#header .right{
+
+    float: right;
+    margin-right:217px;
+}
+#header .right *{
+    font-family:微软雅黑;
+    font-size: 12px;
+    color: #FFFFFF;
+    text-align: justify;
+}
+#header .right span:last-child{
+    margin-left:16px;
+}
+#header .right>span{
+    
+}
+#header .right>span>*{
+    /*padding:5px 5px;*/
+
+    padding:0;
+    height:30px;
+    font-family:微软雅黑;
+    font-size: 12px;
+    color: #FFFFFF;
+    text-align: justify;
+}
+
+/*内容*/
+#content{
+    width:730px;
+    height:640px;
+    margin:53px auto 0 auto;
+    background: white;
+    padding:0;
+}
+/*头部*/
+#content .header1{
+    background: #cccccc;
+    width:730px;
+    height:64px;
+    padding:0;
+}
+
+#content .header1 h4{
+
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #FFFFFF;
+    text-align: justify;
+}
+#content .header1 .media-left{
+    padding:7px 9px;
+
+}
+#content .header1 .media-body{
+    padding-left:15px;
+    height:64px;
+}
+#content .header1 .media-body h4:first-child{
+    padding:17px 0 6px 0;
+    margin:0;
+}
+
+#content .setting{
+    width:730px;
+    height:560px;
+    background: #ffffff;
+}
+
+#content .setting .row{
+    width:552px;
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #999999;
+    text-align: left;
+    margin:16px auto 7px auto;
+}
+#content .setting .photo{
+    width:552px;
+    border-top:1px solid #999999;
+    padding: 0;
+}
+#content .setting .photo p:first-child{
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #666666;
+    text-align: left;
+    margin-top:22px;
+    margin-bottom:0;
+}
+
+#content .setting .photo>p:nth-child(2){
+    font-family:微软雅黑;
+    font-size: 12px;
+    color: #999999;
+    text-align: left;
+    margin-top:8px;
+    margin-bottom:0;
+}
+.image_change{
+    background: url("img/xuanzetouxianng－dikuang.png");
+    width:230px;
+    height:230px;
+}
+#content > div.container-fluid.setting > div.container-fluid.photo > div > div > img{
+    margin:0 auto;
+}
+#content .setting .photo .pics>div:first-child{
+    margin:0;
+    padding:0;
+    margin-top:35px;
+    margin-right:44px;
+
+}
+#content .setting .photo .pics{
+    padding:0;
+}
+#content .setting .photo .pics>*{
+    float: left;
+}
+#content .setting .photo>div>img{
+  margin-top:40px;
+    margin-right:48px;
+}
+#content .setting .photo .pics .view{
+    margin-top:71px;
+}
+#content .setting .photo .pics>div h4{
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #666666;
+    text-align: left;
+    margin-top:0;
+    margin-bottom: 15px;
+}
+#content .setting .photo button{
+    width:92px;
+    height:36px;
+    line-height:36px;
+    margin-top:33px;
+    background: #2986ce;
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #FFFFFF;
+    text-align: left;
+    text-align: center;
+}
+

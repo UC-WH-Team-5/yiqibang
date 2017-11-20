@@ -1,0 +1,48 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+body>div{
+    height:800px;
+    width:100%;
+    background: #333333;
+    margin: 0;
+    padding:0;
+}
+
+#div1{
+    width:85px;
+    height:28px;
+    font-size:20px;
+    color: #FFFFFF;
+    font-family:微软雅黑;
+    text-align: justify;
+    margin:68px auto 39px auto;
+}
+#div2{
+    width:280px;
+    height:280px;
+    margin:0 auto;
+}
+#div3{
+    background: url("img/yuanjiaojuxing.png") no-repeat;
+    margin:21px auto auto auto;
+    width:285px;
+    height:60px;
+}
+#div3>p{
+    font-size:14px;
+    color: #FFFFFF;
+    font-family:微软雅黑;
+    text-align: justify;
+}
+#div3 .p1{
+    text-align: center;
+
+    margin:11px auto 7px auto;
+}
+#div3 .p2{
+    text-align: center;
+    margin:0 auto 8px auto;
+}

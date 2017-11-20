@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录账户</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="../bootstrap/dist/css/bootstrap.min.css">
+
+</head>
+<body>
+<div class="container" id="login">
+    <form class="form-horizontal">
+    <div class="container-fluid clear" id="header">
+        <div class="left">登录账户</div>
+        <div class="right"><span class="glyphicon glyphicon-remove"></span></div>
+    </div>
+    <div class="container-fluid" id="body">
+
+        <div class="row loginMehtod">
+            <div class="col-md-6">帐号登陆</div>
+            <div class="col-md-6">短信登陆</div>
+        </div>
+        <div class="input-group username">
+            <input type="text" class="form-control" aria-label="" placeholder="用户名/手机/邮箱">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">Separated link</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="input-group password">
+            <input type="text" class="form-control" placeholder="请输入密码">
+      <span class="input-group-btn">
+        <a class="btn btn-default" href="#" role="button">找回密码</a>
+      </span>
+        </div><!-- /input-group -->
+        <div class="form-group check_box">
+            <div class="col-sm-4">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> 记住密码
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> 自动登录
+                    </label>
+                </div>
+            </div>
+            <div class="col-sm-4 clear">
+                <button type="submit" class="btn btn-default">注册账号</button>
+            </div>
+        </div>
+        <input class="login" type="submit" name="login" value="登录">
+
+    </div>
+
+
+
+            <legend>其他方式登录</legend>
+
+        <div class="login1 clear">
+            <img src="img/qq.png">
+            <img src="img/weixin.png">
+            <img src="img/xinlang.png">
+        </div>
+
+    </form>
+
+</div>
+</body>
+</html>

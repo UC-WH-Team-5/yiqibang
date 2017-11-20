@@ -1,0 +1,171 @@
+*{
+    margin:0;
+    padding:0;
+}
+
+
+#login{
+    margin:70px 550px 0 550px;
+    width:500px;
+    height:440px;
+    padding:0;
+    border:1px solid #2b87ce;
+
+}
+
+.clear{
+    overflow: hidden;
+    zoom: 1;
+}
+/*头部*/
+#header{
+    margin:0;
+    padding:0;
+    width:500px;
+    height:36px;
+    background: #2b87ce;
+}
+
+#header .left{
+    width:74px;
+    height:38px;
+    font-family:微软雅黑;
+    font-size:13px;
+    color: #FFFFFF;
+    text-align: justify;
+    padding:12px 0 12px 20px;
+
+    float: left;
+}
+#header .right{
+    width:426px;
+    height:36px;
+    padding:0;
+    float: left;
+
+}
+#header .right span{
+    width:12px;
+    height:12px;
+    margin:12px 19px 12px 395px;
+}
+
+/*内容*/
+
+#body .loginMehtod{
+    width:253px;
+    height:36px;
+    margin:8px 17px 17px 130px;
+
+}
+#body .loginMehtod>div{
+    font-family:微软雅黑;
+    font-size:16px;
+    color: #666666;
+    text-align: justify;
+}
+#body .loginMehtod>div:first-child{
+    padding:8px 0 11px 32px;
+}
+#body .loginMehtod>div:last-child{
+    padding:8px 29px 11px 0;
+}
+#body .username{
+    width:252px;
+    height:34px;
+    margin:8px 17px 17px 130px;
+}
+#body .username input{
+    border-right:none;
+}
+#body .username button{
+    border-left:none;
+}
+
+#body .password{
+    width:252px;
+    height:34px;
+    margin:8px 17px 0 130px;
+}
+#body .password input {
+    border-right:none;
+}
+#body .password>span a{
+    border-left:none;
+    font-family:微软雅黑;
+    font-size:12px;
+    color: #cccccc;
+    text-align: justify;
+    height:34px;
+}
+
+/*checkbox*/
+
+#body .check_box{
+    width:252px;
+    height:34px;
+    margin:8px 17px 17px 130px;
+}
+#body .check_box>div{
+    padding:0;
+    height:34px;
+}
+#body .check_box>div>div label{
+    color: #999999;
+    font-family:微软雅黑;
+    font-size:12px;
+    text-align: justify;
+
+}
+
+#body .check_box>div button{
+    border:none;
+    padding:13px 9px 13px 0;
+    color: #999999;
+    font-family:微软雅黑;
+    font-size:12px;
+    text-align: justify;
+    float: right;
+
+}
+
+#body .login{
+    width:252px;
+    height:33px;
+    padding:9px 110px 9px 110px;
+    background: #2986ce;
+    color: #FFFFFF;
+    font-family:微软雅黑;
+    font-size:16px;
+    text-align: justify;
+    margin:0 17px 17px 130px;
+    border:none;
+}
+
+
+/*末尾*/
+form>legend{
+    width:252px;
+    color: #999999;
+    font-family:微软雅黑;
+    font-size:12px;
+    text-align: justify;
+    margin:77px 17px 13px 130px;
+}
+form .login1{
+    margin:0 17px 0 130px;
+}
+
+form .login1>img{
+    width:32px;
+    height:32px;
+    float: left;
+
+}
+form .login1>img:first-child{
+    margin-left:46px;
+    margin-right:32px;
+}
+form .login1>img:last-child{
+    margin-left:32px;
+}

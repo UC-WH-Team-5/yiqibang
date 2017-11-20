@@ -1,0 +1,258 @@
+*{
+    margin:0;
+    padding:0;
+}
+ul,ol,li{
+    list-style: none;
+}
+.clear{
+    overflow: hidden;
+    zoom: 1;
+}
+
+/*头部*/
+#header{
+    width:1600px;
+    height:32px;
+    background: #000;
+}
+#header .left{
+    float: left;
+    width:500px;
+}
+/*#header .left{
+    float: left;
+}*/
+
+#header .left li a{
+    padding:5px 5px;
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #FFFFFF;
+    text-align: justify;
+}
+#header .left li div button{
+    padding:5px 5px;
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #FFFFFF;
+    text-align: justify;
+    background: none;
+    border:none;
+    
+}
+#header .right{
+
+    float: right;
+    padding-right:23px;
+}
+
+#header .right *{
+    font-family:微软雅黑;
+    font-size: 12px;
+    color: #FFFFFF;
+    text-align: justify;
+}
+#header .right input{
+    width:48px;
+    height:32px;
+    text-align: center;
+    background: none;
+    border:none;
+}
+#header .right span:last-child{
+    margin-left:16px;
+}
+#header .right>span{
+
+}
+#header .right>span>*{
+    /*padding:5px 5px;*/
+
+    padding:0;
+    height:30px;
+    font-family:微软雅黑;
+    font-size: 12px;
+    color: #FFFFFF;
+    text-align: justify;
+}
+
+/*内容*/
+#body{
+    width:714px;
+    margin-top:20px;
+    padding:0;
+
+}
+#body ol{
+    background: none;
+    padding:0;
+    margin:0;
+}
+#body ol li a,#body ol li{
+    height:30px;
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #999999;
+    text-align: left;
+}
+#body>ul{
+    margin-top:22px;
+    width:714px;
+    height:356px;
+}
+#body ul .div1{
+    font-family:微软雅黑;
+    font-size: 14px;
+    color: #333333;
+    text-align: left;
+    margin-left:4px;
+
+    margin-bottom:24px;
+}
+#body ul .div2{
+    font-family:微软雅黑;
+    font-size: 12px;
+    color: #333333;
+    text-align: justify;
+    margin-left:4px;
+}
+#body ul .div3{
+    font-family:微软雅黑;
+    font-size: 10px;
+    color: #818181;
+    text-align: justify;
+    margin-left:4px;
+    margin-top:10px;
+}
+#body ul .div4{
+    font-family:微软雅黑;
+    font-size: 10px;
+    color: #818181;
+    text-align: justify;
+    margin-left:4px;
+    margin-top:80px;
+}
+#body ul .div5{
+     font-family:微软雅黑;
+     font-size: 10px;
+     color: #818181;
+     text-align: justify;
+     margin-left:4px;
+     margin-top:8px;
+     margin-bottom:13px;
+ }
+#body ul hr{
+    margin-top:0;
+}
+#body ul .div6>*{
+    float: left;
+    margin-left:10px;
+}
+#body ul .div6 li:first-child{
+    height:28px;
+    line-height:28px;
+    font-family:微软雅黑;
+    font-size: 10px;
+    color: #818181;
+    text-align: justify;
+}
+/*评论*/
+#comment{
+    width:405px;
+    padding:0;
+    margin-left:0;
+
+}
+#comment>ul>*{
+    float: left;
+}
+#comment>ul{
+    margin:0;
+}
+#comment>ul li:first-child{
+    font-family:微软雅黑;
+    font-size: 12px;
+    color: #2986ce;
+    text-align: justify;
+}
+
+#comment>ul li:last-child{
+    font-family:微软雅黑;
+    font-size: 12px;
+    color: #7f7f7f;
+    text-align: justify;
+}
+#comment form>div img{
+    margin-right:5px;
+}
+
+#comment form {
+    margin-top:14px;
+    margin-bottom:22px;
+}
+#com_area{
+    padding:0;
+}
+#com_area .comI{
+    padding:10px 0 0 0;
+
+    width:405px;
+    border-top:1px solid #818181;
+}
+
+#com_area .comI>*{
+    float: left;
+    height:70px;
+}
+#com_area .comI .left{
+    margin-top:10px;
+}
+
+
+#com_area .comI .right ul:first-child{
+    margin-bottom:5px;
+}
+#com_area .comI .right ul:first-child li:first-child{
+    font-size: 10px;
+    color: #2986ce;
+    text-align: justify;
+    float: left;
+}
+#com_area .comI .right ul:first-child li:last-child{
+    font-size: 10px;
+    color: #818181;
+    text-align: justify;
+    float: left;
+}
+#com_area .comI .right span{
+    font-size: 10px;
+    color: #818181;
+    text-align: justify;
+    float: left;
+}
+#com_area .comI .right ul:last-child li:first-child{
+    float: left;
+}
+#com_area .comI .right ul:last-child li:nth-child(2),
+#com_area .comI .right ul:last-child li:nth-child(3),
+#com_area .comI .right ul:last-child li:nth-child(4){
+    float: right;
+}
+#com_area .comI .right>*{
+    width:370px;
+}
+
+#com_area .more_comment{
+    width:405px;
+    height:20px;
+    font-familiy:微软雅黑;
+    font-size: 12px;
+    color: #2986ce;
+    text-align: center;
+    border:none;
+    background: #cccccc;
+}
+#com_area .more_comment a{
+
+}
