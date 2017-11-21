@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.sun.org.apache.xalan.internal.xsltc.util.IntegerArray;
 
+import cn.uc.yiqibang.beans.TNews;
 import cn.uc.yiqibang.beans.TType;
 import cn.uc.yiqibang.dao.TTypeMapper;
 import cn.uc.yiqibang.dao.impl.newsMapperImpl;
@@ -37,17 +38,17 @@ public class TypeServlet extends BaseServlet {
 	}
 	
 	public void adminGetAllTypes(HttpServletRequest request,HttpServletResponse response){
-		Result result = typeDao.selectAllTypes();
+		Result result = typeDao.selectAll();
 		WriteResultToClient.WriteMethod(response, result);		
 	}
 	
 	public void getAllTypes(HttpServletRequest request,HttpServletResponse response){
-		Result result = typeDao.selectAllTypes();
+		Result result = typeDao.selectAll();
 		WriteResultToClient.WriteMethod(response, result);		
 	}
 	
 	public void getAllTypesCount(HttpServletRequest request,HttpServletResponse response){
-		Result result=typeDao.selectAllTypes();
+		Result result=typeDao.selectAll();
 		List<TType> typelist=(List<TType>) result.getRetData();
 		int	count=typelist.size();
 		result.setRetData(count);
@@ -89,7 +90,19 @@ public class TypeServlet extends BaseServlet {
 	}
 	
 	public void getPageAllData(HttpServletRequest request,HttpServletResponse response){
-		
+		int pageNum=Integer.parseInt(request.getParameter("pageNum"));
+		Result result=typeDao.selectAllByPage(pageNum);
+		WriteResultToClient.WriteMethod(response, result);
 	}
+	
+	public void getAllTypeCount(HttpServletRequest request,HttpServletResponse response){
+		Result result=typeDao.selectAll();
+		List<TType> typelist= (List<TType>) result.getRetData();
+		int typeCount=typelist.size();
+		result.setRetData(typeCount);
+		WriteResultToClient.WriteMethod(response, result);
+	}
+		
+	
 
 }

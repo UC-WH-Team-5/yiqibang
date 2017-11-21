@@ -79,6 +79,12 @@
     from t_type
     where t_name like #{likeStr} 
   </select>
+  <select id="selectAllByPage" resultMap="BaseResultMap">
+ 	select 
+    <include refid="Base_Column_List" />
+ 	from t_type
+ 	limit #{startIndex},#{pageCounts}
+  </select>
   <select id="selectAll" resultMap="BaseResultMap">
  	 select 
    <include refid="Base_Column_List" />

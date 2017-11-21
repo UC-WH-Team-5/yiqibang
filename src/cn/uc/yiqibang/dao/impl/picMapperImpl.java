@@ -59,16 +59,7 @@ public class picMapperImpl implements TPicMapper {
 	public Result deleteByCondition(TPic pic) {
 		
 		Result result=new Result();
-		result.setRetCode(Constants.RETCODE_FAIL);
-		result.setRetMsg(false);
-		SqlSession session=MyBatisUtils.openSession();
-		int row=session.delete(Constants.picMapper_deleteByCondition,pic);
-		session.commit();
-		session.close();
-		if(row>0){
-			result.setRetCode(Constants.RETCODE_SUCCESS);
-			result.setRetMsg(true);
-		}
+		
 		return result;
 	}
 

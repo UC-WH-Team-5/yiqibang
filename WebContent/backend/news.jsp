@@ -291,7 +291,7 @@ ul, li {
 				$("#newsList_body")
 						.append(
 								'<tr align="center" class="news_tr">' + "<td>"
-										+ ((pageNum-1)*5+i+1)
+										+ ((pageNum-1)*pageSize+i+1)
 										+ "</td>"
 										+ "<td id='type"+i+"'></td>"
 										+ "<td style='width: 100px' title='"+news.nTitle+"'>"
@@ -417,7 +417,7 @@ ul, li {
 				}
 			},
 			error : function(e) {
-				alert("类型获取异常" + e);
+				/* alert("类型获取异常" + e); */
 			},
 			complet : function(e) {
 				$('#myModal').modal('hide');
@@ -449,7 +449,7 @@ ul, li {
 				},
 				success:function(data){
 					var datas=JSON.parse(data);
-					showAllNews(datas);
+					showAllNews(datas,1);
 				},
 				error:function(e){
 					alert("上传失败");
@@ -600,9 +600,7 @@ ul, li {
 					<h4 class="modal-title" id="myModalLabel">添加新闻</h4>
 				</div>
 				<div class="modal-body">
-					<form class="form-horizontal" id="addNewsForm"
-						action="/java_web_pro/NewsServlet?action=adminInsertNews"
-						method="post">
+					<form class="form-horizontal" >
 						<div class="form-group">
 							<label class="col-sm-2 control-label">类型</label>
 							<div class="col-sm-8">

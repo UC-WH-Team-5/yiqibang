@@ -144,11 +144,11 @@ ul, li {
 	margin: 275px 13.5px 0 13.5px;
 }
 
-.news_tr>td>div {
+.type_tr>td>div {
 	height: 30px;
 }
 
-.news_tr td {
+.type_tr td {
 	max-width: 100px;
 	text-over: ellipsis;
 	white-space: nowrap;
@@ -164,7 +164,7 @@ ul, li {
 	vertical-align: middle !important;
 }
 
-.news_tr>td>div {
+.type_tr>td>div {
 	height: 35px;
 }
 
@@ -178,12 +178,10 @@ ul, li {
 	color: #676767;
 	text-align: center;
 	height: 36px;
-	line-height: 36px; 
+	line-height: 36px;
 	border: 1px solid #ddd;
 	padding: 0;
-
 }
-
 
 .pagebox nav {
 	position: absolute;
@@ -191,21 +189,14 @@ ul, li {
 	left: 320px;
 }
 
-.pagebox nav>ul>li>a {
+/* .pagebox nav>ul>li>a {
 	padding: 0;
 	width: 15px;
 	height: 15px;
 	margin-right: 5px;
-}
-
-#content .right nav>ul>li>a {
-	font-family: 华文宋体;
-	font-size: 12px;
-	color: #dbdbdb;
-	text-align: center;
-	width: 15px;
-	height: 15px;
-	line-height: 15px;
+} */
+#content .right nav>ul {
+	margin: 0;
 }
 
 #content .right .con_header {
@@ -269,45 +260,46 @@ ul, li {
 }
 </style>
 <script>
-	$(function() {		
-		getAllTypes();
-		$(".aactive").css({"background":"#161D22","color":"#E1E2E3"});
-		$(".aactive>img:last-child").css("display","block");
-		
-		
-		
-		
+	$(function() {
+		getPageAllData(1);
+		$(".aactive").css({
+			"background" : "#161D22",
+			"color" : "#E1E2E3"
+		});
+		$(".aactive>img:last-child").css("display", "block");
+
+		showPageBox("/yiqibang/TypeServlet", "getAllTypeCount");
+
 	});
 
-	function getAllTypes() {
+	function getPageAllData(pageNum) {
 		$('#myModal').modal('show');
 		$.getJSON("/yiqibang/TypeServlet", {
-			action : "getAllTypes"
+			action : "getPageAllData",
+			pageNum : pageNum,
 		}, function(data) {
-			showAllTypes(data);
+			console.log(data);
+			showAllData(data, pageNum);
 		});
 	}
 
-	function showAllTypes(data) {
+	function showAllData(data, pageNum) {
 		if (data.retMsg) {
-
 			$("#typesList_body").html("");
 			var typesList = data.retData;
-
 			for (var i = 0; i < typesList.length; i++) {
 				var types = typesList[i];
-
 				$("#typesList_body")
 						.append(
-								'<tr align="center" class="news_tr">' + "<td>"
-										+ (i + 1)
+								'<tr align="center" class="type_tr">' + "<td>"
+										+ ((pageNum - 1) * pageSize + i + 1)
 										+ "</td>"
 										+ "<td>"
 										+ types.tName
 										+ "</td>"
 										+ "<td>"
 										+ getStrDate(types.tCreatetime.time)
-										+ "</td>"										
+										+ "</td>"
 										+ '<td class="icon_row">'
 										+ '<div class="row">'
 										+ '<div class="col-md-6 text-center">'
@@ -315,13 +307,13 @@ ul, li {
 										+ '</div>'
 										+ '<div class="col-md-6 text-center">'
 										+ '<span class="glyphicon glyphicon-trash" id="deleteBtn'
-										+ i + '" onclick="deleteType(' + types.id
-										+ ')"></span>' + '</div>' + '</div>'
-										+ '</td>' + "</tr>");
+										+ i + '" onclick="deleteType('
+										+ types.id + ')"></span>' + '</div>'
+										+ '</div>' + '</td>' + "</tr>");
 			}
 			$(".configBtn").each(function(index) {
 				$("#configBtn" + index).click(function() {
-					
+
 					var types = typesList[index];
 					$('#addTypesModal').modal('show');
 					$("#myModalLabel").text("修改新闻类型");
@@ -329,80 +321,78 @@ ul, li {
 					$('#typeid').val(types.id);
 
 					console.log(types);
-					
+
 				})
 			});
 			$('#myModal').modal('hide');
 		}
 	}
 
-	
-	
 	function addTypesBtn() {
 		$('#addTypesModal').modal('show');
 	}
-	
-	function searchTypesByLike(){
-		var searchTv=$("#searchTv").val();
-		if(searchTv==""){
-			getAllTypes();
-		}else{
+
+	function searchTypesByLike() {
+		var searchTv = $("#searchTv").val();
+		if (searchTv == "") {
+			getPageAllData(1);
+		} else {
 
 			$.ajax({
-				url:"/yiqibang/TypesServlet",
-				data:{
-					action:"adminGetTypesByLike",
-					likeStr:searchTv
+				url : "/yiqibang/TypesServlet",
+				data : {
+					action : "adminGetTypesByLike",
+					likeStr : searchTv
 				},
-				type:"get",
-				timeout:5000,
+				type : "get",
+				timeout : 5000,
 				beforesend : function() {
 					$('#myModal').modal('show');
 				},
-				success:function(data){
-					var datas=JSON.parse(data);
-					showAllTypes(datas);
+				success : function(data) {
+					var datas = JSON.parse(data);
+					showAllData(datas, 1);
 				},
-				error:function(e){
+				error : function(e) {
 					alert("上传失败");
 				},
-				complet:function(){
+				complet : function() {
 					$('#myModal').modal('hide');
 				}
 			})
-			
+
 		}
 	}
-	
-	function deleteType(typeId){
+
+	function deleteType(typeId) {
 		$.ajax({
-			url:"/yiqibang/TypeServlet",
-			data:{
+			url : "/yiqibang/TypeServlet",
+			data : {
 				action : "admindeleteTypesById",
 				typeid : typeId
 			},
-			type:"post",
-			timeout:5000,
-			beforesend:function(){
+			type : "post",
+			timeout : 5000,
+			beforesend : function() {
 				$('#myModal').modal('show');
 			},
-			success:function(data){
-				var jsData=JSON.parse(data);
-				if(jsData.retMsg){
+			success : function(data) {
+				var jsData = JSON.parse(data);
+				if (jsData.retMsg) {
 					alert("删除成功");
 					location.reload();
-				}else{
+				} else {
 					alert("删除失败");
-				};
+				}
+				;
 			},
-			error:function(e){
+			error : function(e) {
 				alert("上传失败");
 			},
-			complet:function(){
+			complet : function() {
 				$('#myModal').modal('hide');
 			}
-			
-			
+
 		})
 	}
 </script>
@@ -425,21 +415,21 @@ ul, li {
 		<div class="container-fluid clear" id="content">
 			<div class="container-fluid left">
 				<div class="list-group">
-					<a href="#" class="list-group-item" > <img
+					<a href="#" class="list-group-item"> <img
 						src="img/public/yonghuguanli.png"> 用户管理 <img
-						src="img/public/cebianlan-sanjiaoxing.png" >
-					</a> <a href="#" class="list-group-item" > <img
+						src="img/public/cebianlan-sanjiaoxing.png">
+					</a> <a href="#" class="list-group-item"> <img
 						src="img/public/xinwenguuanli.png"> 新闻管理 <img
-						src="img/public/cebianlan-sanjiaoxing.png" >
-					</a> <a href="#" class="list-group-item" > <img
+						src="img/public/cebianlan-sanjiaoxing.png">
+					</a> <a href="#" class="list-group-item"> <img
 						src="img/public/pinglunguanli.png"> 评论管理 <img
-						src="img/public/cebianlan-sanjiaoxing.png" >
-					</a> <a href="#" class="list-group-item" > <img
+						src="img/public/cebianlan-sanjiaoxing.png">
+					</a> <a href="#" class="list-group-item"> <img
 						src="img/public/xinwenpachong.png"> 新闻爬虫 <img
-						src="img/public/cebianlan-sanjiaoxing.png" >
-					</a> <a href="#" class="list-group-item aactive" > <img
+						src="img/public/cebianlan-sanjiaoxing.png">
+					</a> <a href="#" class="list-group-item aactive"> <img
 						src="img/public/xinwenguanlfenlei.png"> 新闻分类管理 <img
-						src="img/public/cebianlan-sanjiaoxing.png" >
+						src="img/public/cebianlan-sanjiaoxing.png">
 					</a>
 				</div>
 				<img src="../web/img/logo.png">
@@ -447,9 +437,10 @@ ul, li {
 			<div class="container-fluid right">
 				<div class="container-fluid con_header clear">
 					<div class="input-group">
-						<input type="text" class="form-control" placeholder="标题/内容/时间/来源" id="searchTv">
-						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" onclick="searchTypesByLike()">
+						<input type="text" class="form-control" placeholder="标题/内容/时间/来源"
+							id="searchTv"> <span class="input-group-btn">
+							<button class="btn btn-default" type="button"
+								onclick="searchTypesByLike()">
 								<img src="img/public/fangdajing.png">
 							</button>
 						</span>
@@ -462,7 +453,7 @@ ul, li {
 					<thead>
 						<tr>
 							<td>序号</td>
-							<td>名称</td>							
+							<td>名称</td>
 							<td>时间</td>
 							<td>操作</td>
 						</tr>
@@ -473,23 +464,7 @@ ul, li {
 
 					</tbody>
 				</table>
-				<div class="pagebox" id="pageBox">
-				<!-- <nav aria-label="Page navigation">
-				<ul class="pagination">
-					<li><a href="#" aria-label="Previous"> <span
-							aria-hidden="true">&laquo;</span>
-					</a></li>
-					<li><a href="#">1</a></li>
-					<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#">5</a></li>
-					<li><a href="#" aria-label="Next"> <span
-							aria-hidden="true">&raquo;</span>
-					</a></li>
-				</ul>
-				</nav> -->
-				</div>
+				<div class="pagebox" id="pageBox"></div>
 			</div>
 		</div>
 	</div>
@@ -504,8 +479,8 @@ ul, li {
 					<h4 class="modal-title" id="myModalLabel">添加新闻类型</h4>
 				</div>
 				<div class="modal-body">
-					
-						
+					<form class="form-horizontal">
+
 						<div class="form-group">
 							<label class="col-sm-2 control-label">名称</label>
 							<div class="col-sm-8">
@@ -514,7 +489,7 @@ ul, li {
 									id="typeid" value="0">
 							</div>
 						</div>
-						
+					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -530,21 +505,20 @@ ul, li {
 <script type="text/javascript">
 	$("#myModal").modal('show');
 
-	
 	//添加新闻类型按钮点击事件
 	function addTypesSure() {
-		var name = $("#name").val();		
+		var name = $("#name").val();
 		var model_title = $("#myModalLabel").text();
 		var data = {
-			name:name
+			name : name
 		};
 		if (name == "") {
 			alert("请输入内容");
 			return;
 		}
 		if (model_title == "修改新闻类型") {
-				data.typeid=$("#typeid").val();
-				data.action="adminUpdateTypes";
+			data.typeid = $("#typeid").val();
+			data.action = "adminUpdateTypes";
 		} else {
 			data.action = "adminInsertTypes";
 		}

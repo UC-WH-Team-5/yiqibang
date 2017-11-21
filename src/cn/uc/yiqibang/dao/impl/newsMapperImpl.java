@@ -117,9 +117,20 @@ public class newsMapperImpl implements TNewsMapper {
 	}
 
 	@Override
-	public TNews selectByPrimaryKey(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Result selectByPrimaryKey(Integer id) {
+		Result result=new Result();
+		SqlSession session=MyBatisUtils.openSession();
+		TNews news=session.selectOne(Constants.newsMapper_selectByPrimaryKey,id);
+		session.close();
+		if(news!=null){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetMsg(true);
+			result.setRetData(news);
+		}else{
+			result.setRetCode(Constants.RETCODE_FAIL);
+			result.setRetMsg(false);
+		}
+		return result;
 	}
 
 	@Override
@@ -221,6 +232,24 @@ public class newsMapperImpl implements TNewsMapper {
 		}else {
 			result.setRetMsg(false);
 			result.setRetCode(Constants.RETCODE_FAIL);
+		}
+		return result;
+	}
+
+	@Override
+	public Result updateByCondition(TNews record) {
+		Result result=new Result();
+		SqlSession session=MyBatisUtils.openSession();
+		int row=session.update(Constants.newsMapper_updateByCondition,record);
+		session.commit();
+		session.close();
+		if(row>0){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetData(record);
+			result.setRetMsg(true);
+		}else{
+			result.setRetCode(Constants.RETCODE_FAIL);
+			result.setRetMsg(false);
 		}
 		return result;
 	}

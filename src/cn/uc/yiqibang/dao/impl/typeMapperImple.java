@@ -1,10 +1,10 @@
 package cn.uc.yiqibang.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
-
-import com.sun.corba.se.pept.transport.ContactInfo;
 
 import cn.uc.yiqibang.beans.TNews;
 import cn.uc.yiqibang.beans.TType;
@@ -23,7 +23,7 @@ public class typeMapperImple implements TTypeMapper {
 	Result deleteByPrimaryKey(Integer id) {
 		TNews news=new TNews();
 		news.settTId(id);
-		newsDao.deleteByCondition(news);
+		newsDao.updateByCondition(news);
 		
 		Result result=new Result();
 		result.setRetCode(Constants.RETCODE_FAIL);
@@ -73,7 +73,7 @@ public class typeMapperImple implements TTypeMapper {
 		Result result=new Result();
 		SqlSession session=MyBatisUtils.openSession();
 		TType type=session.selectOne(Constants.typeMapper_selectByPrimaryKey,id);
-		
+		session.close();
 		if(type!=null){
 			result.setRetCode(Constants.RETCODE_SUCCESS);
 			result.setRetData(type);
@@ -110,7 +110,7 @@ public class typeMapperImple implements TTypeMapper {
 	}
 
 	@Override
-	public Result selectAllTypes() {
+	public Result selectAll() {
 		Result result=new Result();
 		SqlSession session=MyBatisUtils.openSession();
 		List<TType> typeList=session.selectList(Constants.typeMapper_selectAll);
@@ -142,5 +142,26 @@ public class typeMapperImple implements TTypeMapper {
 		}
 		return result;
 	}
+
+	@Override
+	public Result selectAllByPage(int pageNum) {
+		Result result=new Result();		
+		SqlSession session=MyBatisUtils.openSession();
+		Map<String,Integer> map=new HashMap<String, Integer>();
+		map.put("startIndex", Constants.typePageCounts*(pageNum-1));
+		map.put("pageCounts", Constants.typePageCounts);
+		List<TNews> news = session.selectList(Constants.typeMapper_selectAllByPage, map);
+		session.close();
+		if (news!=null) {
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetMsg(true);
+			result.setRetData(news);
+		}else {
+			result.setRetMsg(false);
+			result.setRetCode(Constants.RETCODE_FAIL);
+		}
+		return result;
+	}
+
 
 }

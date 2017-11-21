@@ -119,6 +119,12 @@ public class NewsServlet extends BaseServlet {
 		result.setRetData(newsCount);
 		WriteResultToClient.WriteMethod(response, result);
 	}
+	
+	public void adminGetNewsById(HttpServletRequest request,HttpServletResponse response){
+		int id=Integer.parseInt(request.getParameter("id"));
+		Result result=newsDao.selectByPrimaryKey(id);
+		WriteResultToClient.WriteMethod(response, result);
+	}
 
 
 
