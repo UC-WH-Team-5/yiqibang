@@ -4,17 +4,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>管理员管理</title>
+<title>管理员</title>
 <script type="text/javascript" src="../jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="../js/page.js"></script>
 <link rel="stylesheet" href="../bootstrap/dist/css/bootstrap.min.css">
 <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="../js/date_util.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- eEditor -->
-<!-- 配置文件 -->
+
 <script type="text/javascript" src="js/uEditer/ueditor.config.js"></script>
-<!-- 编辑器源码文件 -->
+
 <script type="text/javascript" src="js/uEditer/ueditor.all.js"></script>
 
 <style>
@@ -55,7 +54,7 @@ ul, li {
 }
 
 #header .navbar-header a {
-	font-family: 华文宋体;
+	font-family: 微软雅黑;
 	font-size: 12px;
 	color: #e9ebed;
 	text-align: left;
@@ -78,13 +77,13 @@ ul, li {
 #header ul li button {
 	border: none;
 	background: none;
-	font-family: 华文宋体;
+	font-family: 微软雅黑;
 	font-size: 12px;
 	color: #e9ebed;
 	text-align: left;
 }
 
-/*正文部分*/
+/*姝ｆ枃閮ㄥ垎*/
 #content {
 	width: 920px;
 	height: 520px;
@@ -106,7 +105,7 @@ ul, li {
 	line-height: 32px;
 	background: none;
 	border: none;
-	font-family: 华文宋体;
+	font-family: 微软雅黑;
 	font-size: 12px;
 	color: #ffffff;
 	text-align: left;
@@ -153,7 +152,7 @@ ul, li {
 	text-over: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
-	font-family: 华文宋体;
+	font-family: 微软雅黑;
 	font-size: 12px;
 	color: #949494;
 	text-align: center;
@@ -173,7 +172,7 @@ ul, li {
 }
 
 #content .right table>thead>tr>* {
-	font-family: 华文宋体;
+	font-family: 微软雅黑;
 	font-size: 12px;
 	color: #676767;
 	text-align: center;
@@ -189,12 +188,7 @@ ul, li {
 	left: 320px;
 }
 
-/* .pagebox nav>ul>li>a {
-	padding: 0;
-	width: 15px;
-	height: 15px;
-	margin-right: 5px;
-} */
+
 #content .right nav>ul {
 	margin: 0;
 }
@@ -296,7 +290,7 @@ ul, li {
 	$(function() {
 		getPageAllData(1);
 		getAllUser();
-		getAllNews();
+
 		$(".aactive").css({
 			"background" : "#161D22",
 			"color" : "#E1E2E3"
@@ -314,6 +308,7 @@ ul, li {
 			action : "getPageAllData",
 			pageNum : pageNum,
 		}, function(data) {
+
 			showAllData(data, pageNum);
 		});
 	}
@@ -330,13 +325,13 @@ ul, li {
 								'<tr align="center" class="admin_tr">' + "<td>"
 										+ ((pageNum - 1) * pageSize + i + 1)
 										+ "</td>"
+										+ "<td id='user"+i+"'></td>"
 										+ "<td>"
 										+ admin.uLevel
 										+ "</td>"
 										+ "<td>"
 										+ (admin.uState?"可用":"不可用")
 										+ "</td>"
-										+ "<td id='username"+i+"'></td>"
 										+ "<td id='usertime"+i+"'></td>"										
 										+ '<td class="icon_row">'
 										+ '<div class="row">'
@@ -345,7 +340,7 @@ ul, li {
 										+ '</div>'
 										+ '<div class="col-md-6 text-center">'
 										+ '<span class="glyphicon glyphicon-trash" id="deleteBtn'
-										+ i + '" onclick="deleteType('
+										+ i + '" onclick="deleteAdmin('
 										+ admin.id + ')"></span>' + '</div>'
 										+ '</div>' + '</td>' + "</tr>");
 				$("#content" + i).attr("title", $("#content" + i).text());
@@ -354,19 +349,20 @@ ul, li {
 			}
 			$(".configBtn").each(function(index) {
 				$("#configBtn" + index).click(function() {
-
 					var admin = adminList[index];
 					$('#addAdminModal').modal('show');
-					$("#myModalLabel").text("修改评论");
+					$("#myModalLabel").text("修改管理员");
 					$('#addAdminModal #userid').val(admin.tUId);
-					$('#addAdminModal #newsid').val(admin.tNId);
-					var ue = UE.getEditor('editor', {
-						initialFrameWidth : 400,
-						initialFrameHeight : 300
-					});
-					ue.setContent(admin.cContent);
-					$('#addAdminModal #thumbcount').val(admin.cThumbscount);
+					$('#addAdminModal #level').val(admin.uLevel);
 					$('#adminid').val(admin.id);
+					if(admin.uState){
+						$("#yes").attr("checked",true);
+						$("#no").removeAttr("checked");
+					}else{
+						$("#no").attr("checked",true);
+						$("#yes").removeAttr("checked");
+					}
+					
 
 				})
 			});
@@ -391,6 +387,7 @@ ul, li {
 				var objData = JSON.parse(data);
 				if (objData.retMsg) {
 					$("#user" + index).text(objData.retData.uUsername);
+					$("#usertime"+index).text(objData.retData.uCreatetime);
 				}
 			},
 			error : function(e) {
@@ -402,63 +399,7 @@ ul, li {
 		})
 	}
 
-	function getNewsById(newsId, index) {
-		$.ajax({
-			url : "/yiqibang/NewsServlet",
-			data : {
-				action : "adminGetNewsById",
-				id : newsId
-			},
-			timeout : 5000,
-			type : "get",
-			beforesend : function() {
-				$('#myModal').modal('show');
-			},
-			success : function(data) {
-				var objData = JSON.parse(data);
-				if (objData.retMsg) {
-					$("#news" + index).text(objData.retData.nTitle);
-				}
-			},
-			error : function(e) {
-				alert("类型获取异常" + e);
-			},
-			complet : function(e) {
-				$('#myModal').modal('hide');
-			}
-		})
-	}
 
-	function getAllNews() {
-		$.ajax({
-			url : "/yiqibang/NewsServlet",
-			data : {
-				action : "adminGetAllNews"
-			},
-			type : "get",
-			timeout : 5000,
-			beforesend : function() {
-				$('#myModal').modal('show');
-			},
-			success : function(data) {
-				var jsData = JSON.parse(data);
-				$("#newsid").html("");
-				for (var i = 0; i < jsData.retData.length; i++) {
-					var news = jsData.retData[i];
-					$("#newsid").append(
-							"<option value='"+news.id+"'>" + news.nTitle
-									+ '</option>');
-				}
-			},
-			error : function(e) {
-				/* alert("类型获取异常" + e); */
-			},
-			complet : function(e) {
-				$('#myModal').modal('hide');
-			}
-
-		})
-	}
 
 	function getAllUser() {
 		$.ajax({
@@ -482,7 +423,7 @@ ul, li {
 				}
 			},
 			error : function(e) {
-				/* alert("类型获取异常" + e); */
+				alert("类型获取异常" + e); 
 			},
 			complet : function(e) {
 				$('#myModal').modal('hide');
@@ -491,7 +432,7 @@ ul, li {
 		})
 	}
 
-	function addTypesBtn() {
+	function addAdminBtn() {
 		$('#addAdminModal').modal('show');
 	}
 
@@ -527,7 +468,7 @@ ul, li {
 		}
 	}
 
-	function deleteType(adminId) {
+	function deleteAdmin(adminId) {
 		$.ajax({
 			url : "/yiqibang/AdminServlet",
 			data : {
@@ -581,16 +522,16 @@ ul, li {
 					<a href="#" class="list-group-item  aactive"> <img
 						src="img/public/yonghuguanli.png"> 用户管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
-					</a> <a href="#" class="list-group-item"> <img
+					</a> <a href="news.jsp" class="list-group-item"> <img
 						src="img/public/xinwenguuanli.png"> 新闻管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
-					</a> <a href="#" class="list-group-item"> <img
+					</a> <a href="comment.jsp" class="list-group-item"> <img
 						src="img/public/pinglunguanli.png"> 评论管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
 					</a> <a href="#" class="list-group-item"> <img
 						src="img/public/xinwenpachong.png"> 新闻爬虫 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
-					</a> <a href="#" class="list-group-item "> <img
+					</a> <a href="types.jsp" class="list-group-item "> <img
 						src="img/public/xinwenguanlfenlei.png"> 新闻分类管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
 					</a>
@@ -601,17 +542,17 @@ ul, li {
 				<div class="container-fluid con_header clear">
 					<div class="input-group">
 						<ul class="clear">
-							<li ><a>会员</a></li>
+							<li ><a>用户</a></li>
 							<li class="uactive"><a>管理员</a></li>
 						</ul>
-						<input type="text" class="form-control" placeholder="请输入搜索内容">
+						<input type="text" class="form-control" placeholder="内容">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="button">
 								<img src="img/public/fangdajing.png">
 							</button>
 						</span>
 					</div>
-					<button>
+					<button onclick="addAdminBtn()">
 						<span class="glyphicon glyphicon-plus-sign"></span>添加
 					</button>
 				</div>
@@ -620,7 +561,7 @@ ul, li {
 					<thead>
 						<tr>
 							<td>序号</td>
-							<td>级别</td>
+							<td>等级</td>
 							<td>状态</td>
 							<td>用户名</td>
 							<td>创建时间</td>
@@ -645,36 +586,37 @@ ul, li {
 			<div class="modal-content">
 				<div class="modal-header">
 
-					<h4 class="modal-title" id="myModalLabel">添加评论</h4>
+					<h4 class="modal-title" id="myModalLabel">添加管理员</h4>
 				</div>
 				<div class="modal-body">
 					<form class="form-horizontal">
-						<div class="form-group">
+					 <div class="form-group">
 							<label class="col-sm-2 control-label">用户</label>
 							<div class="col-sm-8">
 								<select id="userid" name="userid" class="form-control"></select>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label">新闻</label>
+							<label class="col-sm-2 control-label">等级</label>
 							<div class="col-sm-8">
-								<select id="newsid" name="newsid" class="form-control"></select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">内容</label>
-							<div class="col-sm-9">
-								<div>
-									<script id="editor" type="text/plain"></script>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">点赞人数</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="thumbcount"
-									name="thumbcount" placeholder="点赞人数" value=""><input
+								<select id="level" name="level" class="form-control">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+								</select><input
 									type="hidden" id="adminid" value="0">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">是否可用</label>
+							<div class="col-sm-8">
+								<label class="radio-inline"> <input type="radio"
+									name="state" id="yes" value="true" checked>可用
+								</label> <label class="radio-inline"> <input type="radio"
+									name="state" id="no" value="false"> 不可用
+								</label>
+
 							</div>
 						</div>
 
@@ -692,39 +634,23 @@ ul, li {
 </body>
 
 <script type="text/javascript">
-	$("#myModal").modal('show');
-	//实例化编辑器
-	var ue = UE.getEditor('editor', {
-		//focus时自动清空初始化时的内容
-		autoClearinitialContent : true,
-		//关闭字数统计
-		wordCount : false,
-		//关闭elementPath
-		elementPathEnabled : false,
-		//默认的编辑区域高度
-		initialFrameWidth : 400,
-		initialFrameHeight : 300
-	//更多其他参数，请参考ueditor.config.js中的配置项
-	});
-	//添加新闻类型按钮点击事件
+	$("#myModal").modal('show');	
 	function addAdminSure() {
-		ue.fireEvent('beforeinsertimage');
 		var userid = $("#userid").val();
-		var newsid = $("#newsid").val();
-		var thumbcount = $("#thumbcount").val();
+		var level= $("#level").val();
+		var state = $("#yes").prop("checked") ? true : false;
 		var model_title = $("#myModalLabel").text();
-		var content = ue.getContent();
+		
 		var data = {
-			userid : userid,
-			newsid : newsid,
-			thumbcount : thumbcount,
-			content : content
+				level : level,
+				state : state,
+				userid:userid
 		};
 		if (userid == "" || newsid == "" || thumbcount == "") {
 			alert("请输入内容");
 			return;
 		}
-		if (model_title == "修改评论") {
+		if (model_title == "修改管理员") {
 			data.adminid = $("#adminid").val();
 			data.action = "adminUpdateAdmin";
 		} else {

@@ -23,7 +23,7 @@ public class typeMapperImple implements TTypeMapper {
 	Result deleteByPrimaryKey(Integer id) {
 		TNews news=new TNews();
 		news.settTId(id);
-		newsDao.updateByCondition(news);
+		newsDao.deleteByCondition(news);
 		
 		Result result=new Result();
 		result.setRetCode(Constants.RETCODE_FAIL);
@@ -159,6 +159,23 @@ public class typeMapperImple implements TTypeMapper {
 		}else {
 			result.setRetMsg(false);
 			result.setRetCode(Constants.RETCODE_FAIL);
+		}
+		return result;
+	}
+
+	@Override
+	public Result selectByCondition(TType record) {
+		Result result=new Result();
+		SqlSession session=MyBatisUtils.openSession();
+		TType type=session.selectOne(Constants.typeMapper_selectByCondition,record);
+		session.close();
+		if(type!=null){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetMsg(true);
+			result.setRetData(type);
+		}else{
+			result.setRetCode(Constants.RETCODE_FAIL);
+			result.setRetMsg(false);
 		}
 		return result;
 	}

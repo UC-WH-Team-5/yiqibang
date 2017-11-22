@@ -18,6 +18,7 @@ public class Constants {
 	public static final String commentMapper=".TCommentMapper";
 	public static final String newsMapper=".TNewsMapper";
 	public static final String typeMapper=".TTypeMapper";
+	public static final String adminMapper=".TAdminMapper";
 	public static final String userMapper=".TUserMapper";
 	
 	
@@ -33,6 +34,8 @@ public class Constants {
 	public static final String selectByTypeId=".selectByTypeId";
 	public static final String selectAllByPage=".selectAllByPage";
 	public static final String updateByCondition=".updateByCondition";
+	public static final String selectByCondition=".selectByCondition";
+	
 	
 	
 	
@@ -75,6 +78,8 @@ public class Constants {
 	public static final String typeMapper_selectAll=root+typeMapper+selectAll;
 	public static final String typeMapper_selectByPrimaryKey=root+typeMapper+selectByPrimaryKey;
 	public static final String typeMapper_deleteByCondition=root+typeMapper+deleteByCondition;
+	public static final String typeMapper_selectByCondition=root+typeMapper+selectByCondition;
+	
 	
 	//User用户的操作路径
 	public static final int userPageCounts=5;
@@ -87,6 +92,18 @@ public class Constants {
 	public static final String userMapper_selectByPrimaryKey=root+userMapper+selectByPrimaryKey;
 	public static final String userMapper_deleteByCondition=root+userMapper+deleteByCondition;
 	
-
+	//Admin管理员的操作语句路径
+		public static final int adminPageCounts=5;
+		public static final String adminMapper_selectAll=root+adminMapper+selectAll;
+		public static final String adminMapper_insert=root+adminMapper+insert;
+		public static final String adminMapper_insertSelective=root+adminMapper+insertSelective;
+		public static final String adminMapper_updateByPrimaryKeySelective=root+adminMapper+updateByPrimaryKeySelective;
+		public static final String adminMapper_updateByCondition=root+adminMapper+updateByCondition;
+		public static final String adminMapper_selectByLike=root+adminMapper+selectByLike;
+		public static final String adminMapper_deleteByPrimaryKey=root+adminMapper+deleteByPrimaryKey;
+		public static final String adminMapper_selectByTypeId=root+adminMapper+selectByTypeId;
+		public static final String adminMapper_deleteByCondition=root+adminMapper+deleteByCondition;
+		public static final String adminMapper_selectAllByPage=root+adminMapper+selectAllByPage;
+		public static final String adminMapper_selectByPrimaryKey=root+adminMapper+selectByPrimaryKey;
 	
 }

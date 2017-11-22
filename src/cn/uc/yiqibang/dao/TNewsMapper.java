@@ -14,6 +14,8 @@ import org.apache.ibatis.executor.loader.ResultLoader;
 
 
 public interface TNewsMapper {
+	
+	
     
 	Result updateByCondition(TNews news);
 	

@@ -549,10 +549,10 @@ ul, li {
 		<div class="container-fluid clear" id="content">
 			<div class="container-fluid left">
 				<div class="list-group">
-					<a href="#" class="list-group-item"> <img
+					<a href="admin.jsp" class="list-group-item"> <img
 						src="img/public/yonghuguanli.png"> 用户管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
-					</a> <a href="#" class="list-group-item"> <img
+					</a> <a href="news.jsp" class="list-group-item"> <img
 						src="img/public/xinwenguuanli.png"> 新闻管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
 					</a> <a href="#" class="list-group-item aactive"> <img
@@ -561,7 +561,7 @@ ul, li {
 					</a> <a href="#" class="list-group-item"> <img
 						src="img/public/xinwenpachong.png"> 新闻爬虫 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
-					</a> <a href="#" class="list-group-item "> <img
+					</a> <a href="types" class="list-group-item "> <img
 						src="img/public/xinwenguanlfenlei.png"> 新闻分类管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
 					</a>

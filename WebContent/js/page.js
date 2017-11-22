@@ -129,7 +129,7 @@
 				var objData = JSON.parse(data);
 				itemCount = objData.retData;
 				pageCount = Math.ceil(Number(itemCount) / pageSize);
-				$("#page_count").text(pageCount);
+				/*$("#page_count").text(pageCount);*/
 				//设置中间页
 				if (pageCount < 5) {
 					$(".nav_number").each(function(index) {
@@ -148,7 +148,7 @@
 				changePage();
 			},
 			error : function(e) {//请求失败回掉函数
-				alert("类型获取异常" + e);
+				/*alert("类型获取异常" + e);*/
 			},
 			complete : function() {//请求完成时候的回调函数
 				$('#MyModal').modal('hide');

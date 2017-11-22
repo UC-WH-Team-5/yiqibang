@@ -329,6 +329,7 @@ ul, li {
 	}
 
 	function addTypesBtn() {
+		$("#name").val("");
 		$('#addTypesModal').modal('show');
 	}
 
@@ -415,13 +416,13 @@ ul, li {
 		<div class="container-fluid clear" id="content">
 			<div class="container-fluid left">
 				<div class="list-group">
-					<a href="#" class="list-group-item"> <img
+					<a href="admin.jsp" class="list-group-item"> <img
 						src="img/public/yonghuguanli.png"> 用户管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
-					</a> <a href="#" class="list-group-item"> <img
+					</a> <a href="news.jsp" class="list-group-item"> <img
 						src="img/public/xinwenguuanli.png"> 新闻管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
-					</a> <a href="#" class="list-group-item"> <img
+					</a> <a href="comment.jsp" class="list-group-item"> <img
 						src="img/public/pinglunguanli.png"> 评论管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
 					</a> <a href="#" class="list-group-item"> <img
@@ -508,6 +509,7 @@ ul, li {
 	//添加新闻类型按钮点击事件
 	function addTypesSure() {
 		var name = $("#name").val();
+		
 		var model_title = $("#myModalLabel").text();
 		var data = {
 			name : name
@@ -531,9 +533,12 @@ ul, li {
 				$('#myModal').modal('show');
 			},
 			success : function(data) {
+				console.log(data);
 				var jsonData = JSON.parse(data);
-				if (jsonData.retMsg) {
-					location.reload();
+				if (jsonData.retData!=null&&jsonData.retMsg) {
+					getPageAllData(pageCount);
+				}else if(jsonData.retData="1"){
+					alert("类型已存在，请重新输入");
 				}
 			},
 			error : function(e) {

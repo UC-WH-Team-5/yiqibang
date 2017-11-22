@@ -72,21 +72,40 @@ public class TypeServlet extends BaseServlet {
 	public void adminInsertTypes(HttpServletRequest request,HttpServletResponse response){
 		String name=request.getParameter("name");
 		TType type=new TType();
-		type.settCreatetime(new Date());
 		type.settName(name);
-		Result result=typeDao.insertSelective(type);
-		WriteResultToClient.WriteMethod(response, result);
+		Result result=new Result();
+		Result rs=typeDao.selectByCondition(type);
+		if(rs.isRetMsg()){
+			System.out.println("1");
+			result.setRetData("1");
+			WriteResultToClient.WriteMethod(response, result);
+		}else{
+			System.out.println("0");
+			type.settCreatetime(new Date());
+			result=typeDao.insertSelective(type);
+			WriteResultToClient.WriteMethod(response, result);
+		}
+		
 	}
 	
 	public void adminUpdateTypes(HttpServletRequest request,HttpServletResponse response){
+		int typeid= Integer.parseInt(request.getParameter("typeid"));		
 		String name=request.getParameter("name");
-		int typeid= Integer.parseInt(request.getParameter("typeid"));
 		TType type=new TType();
-		type.settCreatetime(new Date());
 		type.settName(name);
-		type.setId(typeid);
-		Result result=typeDao.updateByPrimaryKeySelective(type);
-		WriteResultToClient.WriteMethod(response, result);
+		Result result=new Result();
+		Result rs=typeDao.selectByCondition(type);
+		if(rs.isRetMsg()){
+			System.out.println("1");
+			result.setRetData("1");
+			WriteResultToClient.WriteMethod(response, result);
+		}else{
+			System.out.println("0");
+			type.setId(typeid);
+			type.settCreatetime(new Date());
+			result=typeDao.updateByPrimaryKeySelective(type);
+			WriteResultToClient.WriteMethod(response, result);
+		}
 	}
 	
 	public void getPageAllData(HttpServletRequest request,HttpServletResponse response){

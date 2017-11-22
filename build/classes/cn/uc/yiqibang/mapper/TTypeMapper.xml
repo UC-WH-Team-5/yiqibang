@@ -71,6 +71,14 @@
     from t_type
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	 select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Base_Column_List" />
+    from t_type
+    where  t_name = #{tName,jdbcType=VARCHAR}
+  </select>
   <select id="selectByLike" resultMap="BaseResultMap" parameterType="java.lang.String">
   	 select 
     <include refid="Base_Column_List" />

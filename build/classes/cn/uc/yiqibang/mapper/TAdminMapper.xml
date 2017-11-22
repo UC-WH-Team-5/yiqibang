@@ -54,6 +54,25 @@
     -->
     id, t_u_id, u_state, u_level
   </sql>
+  <select id="selectByLike" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	 select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Base_Column_List" />
+    from t_admin
+    where u_level like #{likeStr} 
+  </select>
+  <select id="selectAllByPage" resultMap="BaseResultMap">
+ 	select 
+    <include refid="Base_Column_List" />
+ 	from t_admin
+ 	limit #{startIndex},#{pageCounts}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+ 	 select 
+   <include refid="Base_Column_List" />
+   from t_admin
+  </select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.uc.yiqibang.beans.TAdminExample" >
     <!--
       WARNING - @mbggenerated
