@@ -18,7 +18,7 @@ public class Constants {
 	public static final String commentMapper=".TCommentMapper";
 	public static final String newsMapper=".TNewsMapper";
 	public static final String typeMapper=".TTypeMapper";
-	public static final String userMapper=".TuserMapper";
+	public static final String userMapper=".TUserMapper";
 	
 	
 	//定义操作的sql语句的id名称

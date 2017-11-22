@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>评论管理</title>
+<title>管理员管理</title>
 <script type="text/javascript" src="../jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="../js/page.js"></script>
 <link rel="stylesheet" href="../bootstrap/dist/css/bootstrap.min.css">
@@ -144,11 +144,11 @@ ul, li {
 	margin: 275px 13.5px 0 13.5px;
 }
 
-.comm_tr>td>div {
+.admin_tr>td>div {
 	height: 30px;
 }
 
-.comm_tr td {
+.admin_tr td {
 	max-width: 100px;
 	text-over: ellipsis;
 	white-space: nowrap;
@@ -164,7 +164,7 @@ ul, li {
 	vertical-align: middle !important;
 }
 
-.comm_tr>td>div {
+.admin_tr>td>div {
 	height: 35px;
 }
 
@@ -205,6 +205,10 @@ ul, li {
 	background: #ededed;
 }
 
+#content .right .con_header>div>ul>li>a {
+	margin-left: 11px;
+}
+
 #content .right .con_header>* {
 	float: left;
 	height: 30px;
@@ -212,24 +216,53 @@ ul, li {
 }
 
 #content .right .con_header>div {
-	width: 210px;
+	width: 500px;
+	height: 50px;
+	position: relative;
+	margin: 0;
 }
 
 #content .right .con_header>div>input {
 	width: 170px;
 	height: 30px;
+	position: absolute;
+	top: 10px;
+	left: 300px;
 }
 
 #content>div.container-fluid.right>div>button {
-	margin-left: 450px;
+	margin-left: 160px;
 	width: 60px;
+}
+
+#content .right .con_header>div>span {
+	position: absolute;
+	left: 470px;
+	top: 10px;
 }
 
 #content .right .con_header>div>span>button {
 	width: 40px;
 	height: 30px;
-	padding: 0;
 	border-left: none;
+	padding: 0;
+}
+
+#content>div.container-fluid.right>div>div>ul {
+	position: absolute;
+	height: 40px;
+	left: 50px;
+	top: 10px;
+}
+
+#content>div.container-fluid.right>div>div>ul>li {
+	float: left;
+	width: 50px;
+}
+
+#content>div.container-fluid.right>div>div>ul>li>a {
+	height: 40px;
+	line-height: 40px;
 }
 
 #addNewsModal {
@@ -269,14 +302,15 @@ ul, li {
 			"color" : "#E1E2E3"
 		});
 		$(".aactive>img:last-child").css("display", "block");
+		$(".uactive").css("background","#FFA705")
 
-		showPageBox("/yiqibang/CommServlet", "getAllCommCount");
+		showPageBox("/yiqibang/AdminServlet", "getAllAdminCount");
 
 	});
 
 	function getPageAllData(pageNum) {
 		$('#myModal').modal('show');
-		$.getJSON("/yiqibang/CommServlet", {
+		$.getJSON("/yiqibang/AdminServlet", {
 			action : "getPageAllData",
 			pageNum : pageNum,
 		}, function(data) {
@@ -286,29 +320,24 @@ ul, li {
 
 	function showAllData(data, pageNum) {
 		if (data.retMsg) {
-			$("#commList_body").html("");
-			var commList = data.retData;
-			for (var i = 0; i < commList.length; i++) {
-				var comm = commList[i];
-				console.log(comm);
-				$("#commList_body")
+			$("#adminList_body").html("");
+			var adminList = data.retData;
+			for (var i = 0; i < adminList.length; i++) {
+				var admin = adminList[i];
+				console.log(admin);
+				$("#adminList_body")
 						.append(
-								'<tr align="center" class="comm_tr">' + "<td>"
+								'<tr align="center" class="admin_tr">' + "<td>"
 										+ ((pageNum - 1) * pageSize + i + 1)
 										+ "</td>"
-										+ "<td id='user"+i+"'></td>"
-										+ "<td id='news"+i+"'></td>"
-										+ "<td style='width: 200px' id='content"+i+"'>"
-										+ '<div>'
-										+ comm.cContent
-										+ '</div>'
+										+ "<td>"
+										+ admin.uLevel
 										+ "</td>"
 										+ "<td>"
-										+ getStrDate(comm.cCreatetime.time)
+										+ (admin.uState?"可用":"不可用")
 										+ "</td>"
-										+ "<td>"
-										+ comm.cThumbscount
-										+ "</td>"
+										+ "<td id='username"+i+"'></td>"
+										+ "<td id='usertime"+i+"'></td>"										
 										+ '<td class="icon_row">'
 										+ '<div class="row">'
 										+ '<div class="col-md-6 text-center">'
@@ -317,34 +346,34 @@ ul, li {
 										+ '<div class="col-md-6 text-center">'
 										+ '<span class="glyphicon glyphicon-trash" id="deleteBtn'
 										+ i + '" onclick="deleteType('
-										+ comm.id + ')"></span>' + '</div>'
+										+ admin.id + ')"></span>' + '</div>'
 										+ '</div>' + '</td>' + "</tr>");
-				$("#content"+i).attr("title",$("#content"+i).text());
-				getUserById(comm.tUId, i);
-				getNewsById(comm.tNId, i);
+				$("#content" + i).attr("title", $("#content" + i).text());
+				getUserById(admin.tUId, i);
+				
 			}
 			$(".configBtn").each(function(index) {
 				$("#configBtn" + index).click(function() {
 
-					var comm = commList[index];
-					$('#addCommModal').modal('show');
+					var admin = adminList[index];
+					$('#addAdminModal').modal('show');
 					$("#myModalLabel").text("修改评论");
-					$('#addCommModal #userid').val(comm.tUId);
-					$('#addCommModal #newsid').val(comm.tNId);
+					$('#addAdminModal #userid').val(admin.tUId);
+					$('#addAdminModal #newsid').val(admin.tNId);
 					var ue = UE.getEditor('editor', {
 						initialFrameWidth : 400,
 						initialFrameHeight : 300
 					});
-					ue.setContent(comm.cContent);
-					$('#addCommModal #thumbcount').val(comm.cThumbscount);				
-					$('#commid').val(comm.id);
+					ue.setContent(admin.cContent);
+					$('#addAdminModal #thumbcount').val(admin.cThumbscount);
+					$('#adminid').val(admin.id);
 
 				})
 			});
 			$('#myModal').modal('hide');
 		}
 	}
-	
+
 	function getUserById(userId, index) {
 		$.ajax({
 			url : "/yiqibang/UserServlet",
@@ -358,7 +387,7 @@ ul, li {
 				$('#myModal').modal('show');
 			},
 			success : function(data) {
-				
+
 				var objData = JSON.parse(data);
 				if (objData.retMsg) {
 					$("#user" + index).text(objData.retData.uUsername);
@@ -372,7 +401,7 @@ ul, li {
 			}
 		})
 	}
-	
+
 	function getNewsById(newsId, index) {
 		$.ajax({
 			url : "/yiqibang/NewsServlet",
@@ -399,7 +428,7 @@ ul, li {
 			}
 		})
 	}
-	
+
 	function getAllNews() {
 		$.ajax({
 			url : "/yiqibang/NewsServlet",
@@ -430,7 +459,7 @@ ul, li {
 
 		})
 	}
-	
+
 	function getAllUser() {
 		$.ajax({
 			url : "/yiqibang/UserServlet",
@@ -463,19 +492,19 @@ ul, li {
 	}
 
 	function addTypesBtn() {
-		$('#addCommModal').modal('show');
+		$('#addAdminModal').modal('show');
 	}
 
-	function searchCommByLike() {
+	function searchAdminByLike() {
 		var searchTv = $("#searchTv").val();
 		if (searchTv == "") {
 			getPageAllData(1);
 		} else {
 
 			$.ajax({
-				url : "/yiqibang/CommServlet",
+				url : "/yiqibang/AdminServlet",
 				data : {
-					action : "adminGetCommByLike",
+					action : "adminGetAdminByLike",
 					likeStr : searchTv
 				},
 				type : "get",
@@ -498,12 +527,12 @@ ul, li {
 		}
 	}
 
-	function deleteType(commId) {
+	function deleteType(adminId) {
 		$.ajax({
-			url : "/yiqibang/CommServlet",
+			url : "/yiqibang/AdminServlet",
 			data : {
-				action : "admindeleteCommById",
-				commid : commId
+				action : "admindeleteAdminById",
+				adminid : adminId
 			},
 			type : "post",
 			timeout : 5000,
@@ -549,13 +578,13 @@ ul, li {
 		<div class="container-fluid clear" id="content">
 			<div class="container-fluid left">
 				<div class="list-group">
-					<a href="#" class="list-group-item"> <img
+					<a href="#" class="list-group-item  aactive"> <img
 						src="img/public/yonghuguanli.png"> 用户管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
 					</a> <a href="#" class="list-group-item"> <img
 						src="img/public/xinwenguuanli.png"> 新闻管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
-					</a> <a href="#" class="list-group-item aactive"> <img
+					</a> <a href="#" class="list-group-item"> <img
 						src="img/public/pinglunguanli.png"> 评论管理 <img
 						src="img/public/cebianlan-sanjiaoxing.png">
 					</a> <a href="#" class="list-group-item"> <img
@@ -571,31 +600,34 @@ ul, li {
 			<div class="container-fluid right">
 				<div class="container-fluid con_header clear">
 					<div class="input-group">
-						<input type="text" class="form-control" placeholder="标题/内容/时间/来源"
-							id="searchTv"> <span class="input-group-btn">
-							<button class="btn btn-default" type="button"
-								onclick="searchCommByLike()">
+						<ul class="clear">
+							<li ><a>会员</a></li>
+							<li class="uactive"><a>管理员</a></li>
+						</ul>
+						<input type="text" class="form-control" placeholder="请输入搜索内容">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button">
 								<img src="img/public/fangdajing.png">
 							</button>
 						</span>
 					</div>
-					<button onclick="addTypesBtn()">
+					<button>
 						<span class="glyphicon glyphicon-plus-sign"></span>添加
 					</button>
 				</div>
+
 				<table class="table table-bordered table-stripted">
 					<thead>
 						<tr>
 							<td>序号</td>
-							<td>用户</td>
-							<td>新闻</td>
-							<td>内容</td>
+							<td>级别</td>
+							<td>状态</td>
+							<td>用户名</td>
 							<td>创建时间</td>
-							<td>点赞人数</td>
 							<td>操作</td>
 						</tr>
 					</thead>
-					<tbody id="commList_body">
+					<tbody id="adminList_body">
 
 
 
@@ -607,7 +639,7 @@ ul, li {
 	</div>
 	</div>
 
-	<div class="modal fade" id="addCommModal" tabindex="-1" role="dialog"
+	<div class="modal fade" id="addAdminModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -640,18 +672,18 @@ ul, li {
 						<div class="form-group">
 							<label class="col-sm-2 control-label">点赞人数</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="thumbcount" name="thumbcount"
-									placeholder="点赞人数" value=""><input type="hidden"
-									id="commid" value="0">
+								<input type="text" class="form-control" id="thumbcount"
+									name="thumbcount" placeholder="点赞人数" value=""><input
+									type="hidden" id="adminid" value="0">
 							</div>
 						</div>
-						
+
 					</form>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 					<button type="button" class="btn btn-primary"
-						onclick="addCommSure()">确定</button>
+						onclick="addAdminSure()">确定</button>
 				</div>
 			</div>
 		</div>
@@ -675,32 +707,32 @@ ul, li {
 	//更多其他参数，请参考ueditor.config.js中的配置项
 	});
 	//添加新闻类型按钮点击事件
-	function addCommSure() {
+	function addAdminSure() {
 		ue.fireEvent('beforeinsertimage');
-		var userid=$("#userid").val();
-		var newsid=$("#newsid").val();
-		var thumbcount=$("#thumbcount").val();
+		var userid = $("#userid").val();
+		var newsid = $("#newsid").val();
+		var thumbcount = $("#thumbcount").val();
 		var model_title = $("#myModalLabel").text();
 		var content = ue.getContent();
 		var data = {
-				userid:userid,
-				newsid:newsid,
-				thumbcount : thumbcount,
-				content:content
+			userid : userid,
+			newsid : newsid,
+			thumbcount : thumbcount,
+			content : content
 		};
-		if (userid == "" || newsid == "" || thumbcount == "" ) {
+		if (userid == "" || newsid == "" || thumbcount == "") {
 			alert("请输入内容");
 			return;
 		}
 		if (model_title == "修改评论") {
-			data.commid = $("#commid").val();
-			data.action = "adminUpdateComm";
+			data.adminid = $("#adminid").val();
+			data.action = "adminUpdateAdmin";
 		} else {
-			data.action = "adminInsertComm";
+			data.action = "adminInsertAdmin";
 		}
 
 		$.ajax({
-			url : "/yiqibang/CommServlet",
+			url : "/yiqibang/AdminServlet",
 			data : data,
 			timeout : 5000,
 			beforesend : function() {
@@ -717,7 +749,7 @@ ul, li {
 			},
 			complete : function() {
 				$('#myModal').modal('hide');
-				$('#addCommModal').modal('hide');
+				$('#addAdminModal').modal('hide');
 			}
 
 		})

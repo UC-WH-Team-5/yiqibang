@@ -32,6 +32,12 @@ public class NewsServlet extends BaseServlet {
 		WriteResultToClient.WriteMethod(response, result);		
 	}
 	
+	public void adminGetAllNews(HttpServletRequest request, HttpServletResponse response){
+		Result result=newsDao.selectAll();
+		WriteResultToClient.WriteMethod(response, result);		
+	}
+	
+	
 	public void adminInsertNews(HttpServletRequest request, HttpServletResponse response){
 		int typeid=Integer.parseInt(request.getParameter("typeid"));
 		String title=request.getParameter("title");

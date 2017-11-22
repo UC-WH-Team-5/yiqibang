@@ -32,9 +32,19 @@ public class userMapperImpl implements TUserMapper {
 	}
 
 	@Override
-	public Result selectAllTypes() {
-		// TODO Auto-generated method stub
-		return null;
+	public Result selectAll() {
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		List<TUser> userlist=session.selectList(Constants.userMapper_selectAll);
+		session.close();
+		if(userlist!=null){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetData(userlist);
+			result.setRetMsg(true);
+		}
+		return result;
 	}
 
 	@Override

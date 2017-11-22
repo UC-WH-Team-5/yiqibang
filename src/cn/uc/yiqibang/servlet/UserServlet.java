@@ -29,5 +29,11 @@ public class UserServlet extends BaseServlet {
 		WriteResultToClient.WriteMethod(response, result);
 		
 	}
+	
+	public void GetAllUser(HttpServletRequest request, HttpServletResponse response){
+		Result result=userDao.selectAll();
+		WriteResultToClient.WriteMethod(response, result);		
+	}
+	
 
 }

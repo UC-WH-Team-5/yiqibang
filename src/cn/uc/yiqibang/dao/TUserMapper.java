@@ -15,7 +15,7 @@ public interface TUserMapper {
 
     Result deleteByPrimaryKey(Integer id);
     
-    Result selectAllTypes();
+    Result selectAll();
     
     Result updateByPrimaryKeySelective(TUser record);
     

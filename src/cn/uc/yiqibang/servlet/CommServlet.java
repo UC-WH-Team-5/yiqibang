@@ -1,6 +1,7 @@
 package cn.uc.yiqibang.servlet;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -52,4 +53,51 @@ public class CommServlet extends BaseServlet {
 		Result result=commDao.deleteByPrimaryKey(commid);
 		WriteResultToClient.WriteMethod(response, result);		
 	}
+	
+	public void adminUpdateComm(HttpServletRequest request,HttpServletResponse response){
+		int commid=Integer.parseInt(request.getParameter("commid"));
+		int userid=Integer.parseInt(request.getParameter("userid"));
+		int newsid=Integer.parseInt(request.getParameter("newsid"));
+		String content=request.getParameter("content");
+		String editorValue=request.getParameter("editorValue");
+		int thumbcount=Integer.parseInt(request.getParameter("thumbcount"));
+		
+		TComment comm=new TComment();
+		comm.setId(commid);
+		comm.setcContent(editorValue);
+		comm.setcContent(content);
+		comm.setcCreatetime(new Date());
+		comm.setcThumbscount(thumbcount);
+		comm.settNId(newsid);
+		comm.settUId(userid);
+		
+		Result result=commDao.updateByPrimaryKeySelective(comm);
+		WriteResultToClient.WriteMethod(response, result);		
+	}
+	
+	public void adminInsertComm(HttpServletRequest request,HttpServletResponse response){
+		System.out.println("aa");
+
+		int userid=Integer.parseInt(request.getParameter("userid"));
+
+		int newsid=Integer.parseInt(request.getParameter("newsid"));
+		String content=request.getParameter("content");
+		String editorValue=request.getParameter("editorValue");
+		int thumbcount=Integer.parseInt(request.getParameter("thumbcount"));
+		
+		TComment comm=new TComment();
+		comm.setcContent(editorValue);
+		comm.setcContent(content);
+		comm.setcCreatetime(new Date());
+		comm.setcThumbscount(thumbcount);
+		comm.settNId(newsid);
+		comm.settUId(userid);
+		System.out.println(comm);
+		Result result=commDao.insertSelective(comm);
+		WriteResultToClient.WriteMethod(response, result);		
+	}
+	
+
+
+	
 }

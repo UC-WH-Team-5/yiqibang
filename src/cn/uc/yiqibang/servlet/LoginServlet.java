@@ -33,7 +33,10 @@ public class LoginServlet extends HttpServlet {
 		if(result){
 			System.out.println("µÇÂ½³É¹¦");
 			response.sendRedirect("/project/index.jsp");
-			TUser user=new TUser(username,password);
+			
+			TUser user=new TUser();
+			user.setuUsername(username);
+			user.setuPassword(password);
 			request.getSession().setAttribute("loginUser", user);
 		}else{
 			System.out.println("µÇÂ¼Ê§°Ü");
