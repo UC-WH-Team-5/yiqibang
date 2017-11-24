@@ -88,6 +88,13 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByUsername" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_user
+		where u_username=#{username,jdbcType=VARCHAR}
+	</select>
    <select id="selectAll" resultMap="BaseResultMap">
   	 select 
     <include refid="Base_Column_List" />

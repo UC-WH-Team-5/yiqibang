@@ -324,7 +324,7 @@ ul, li {
 										+ (news.nIfreport ? "是" : "否")
 										+ "</td>"
 
-										+ '</td>'
+
 										+ '<td class="icon_row">'
 										+ '<div class="row">'
 										+ '<div class="col-md-6 text-center">'

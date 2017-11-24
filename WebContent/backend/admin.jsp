@@ -405,7 +405,7 @@ ul, li {
 		$.ajax({
 			url : "/yiqibang/UserServlet",
 			data : {
-				action : "GetAllUser"
+				action : "getAllUser"
 			},
 			type : "get",
 			timeout : 5000,
@@ -446,7 +446,7 @@ ul, li {
 			$.ajax({
 				url : "/yiqibang/AdminServlet",
 				data : {
-					action : "adminGetAdminByLike",
+					action : "getAdminByLike",
 					likeStr : searchTv
 				},
 				type : "get",
@@ -473,7 +473,7 @@ ul, li {
 		$.ajax({
 			url : "/yiqibang/AdminServlet",
 			data : {
-				action : "admindeleteAdminById",
+				action : "deleteAdminById",
 				adminid : adminId
 			},
 			type : "post",
@@ -546,7 +546,7 @@ ul, li {
 							<li ><a href="user.jsp">用户</a></li>
 							<li class="uactive"><a>管理员</a></li>
 						</ul>
-						<input type="text" class="form-control" placeholder="内容">
+						<input type="text" class="form-control" placeholder="内容" id="searchTv">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="button" onclick="searchAdminByLike()">
 								<img src="img/public/fangdajing.png">
@@ -647,7 +647,7 @@ ul, li {
 				state : state,
 				userid: userid
 		};
-		if (userid == "" || level == "" || state == "") {
+		if (userid == "" || level == "") {
 			alert("请输入内容");
 			return;
 		}
@@ -655,7 +655,8 @@ ul, li {
 			data.adminid = $("#adminid").val();
 			data.action = "adminUpdateAdmin";
 		} else {
-			data.action = "adminInsertAdmin";
+			/* data.action = "adminInsertAdmin"; */
+			alert("请先注册用户");
 		}
 
 		$.ajax({

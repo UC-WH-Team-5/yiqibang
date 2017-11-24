@@ -172,6 +172,8 @@ public class adminMapperImpl implements TAdminMapper {
 			result.setRetCode(Constants.RETCODE_SUCCESS);
 			result.setRetData(admin);
 			result.setRetMsg(true);
+		}else if(admin==null){
+			result.setRetCode(1003);
 		}
 		return result;
 		

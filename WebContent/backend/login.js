@@ -1,4 +1,4 @@
-var path="/YiQiBang";
+var path="/yiqibang";
 
 
 /**

@@ -56,19 +56,22 @@ public class AdminServlet extends BaseServlet {
 		WriteResultToClient.WriteMethod(response, result);
 	}
 	
-	public void adminGetAdminByLike(HttpServletRequest request,HttpServletResponse response){
+	public void getAdminByLike(HttpServletRequest request,HttpServletResponse response){
 		String likeStr=request.getParameter("likeStr");
 		Result result=adminDao.selectByLike("%"+likeStr+"%");
 		WriteResultToClient.WriteMethod(response, result);	
 	}
 	
-	public void admindeleteAdminById(HttpServletRequest request,HttpServletResponse response){
+	public void deleteAdminById(HttpServletRequest request,HttpServletResponse response){
 		int adminid=Integer.parseInt(request.getParameter("adminid"));					
 		Result result=adminDao.deleteByPrimaryKey(adminid);
 		WriteResultToClient.WriteMethod(response, result);	
 	}
 	
-	public void adminInsertAdmin(HttpServletRequest request,HttpServletResponse response){
+	public void InsertAdmin(HttpServletRequest request,HttpServletResponse response){
+		
+		
+		
 		int level=Integer.parseInt(request.getParameter("level"));
 		int userid=Integer.parseInt(request.getParameter("userid"));
 		boolean state=Boolean.parseBoolean(request.getParameter("state"));
@@ -134,10 +137,10 @@ public class AdminServlet extends BaseServlet {
 				}
 			} else {
 				result.setRetMsg(false);
-				result.setRetCode(Constants.RETCODE_FAIL);
+				result.setRetCode(1002);
 			}
 		} else {
-			result.setRetCode(Constants.RETCODE_FAIL);
+			result.setRetCode(1001);
 			result.setRetMsg(false);
 		}
 		WriteResultToClient.WriteMethod(response, result);

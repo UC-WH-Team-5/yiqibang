@@ -37,8 +37,9 @@ public class Constants {
 	public static final String selectByCondition=".selectByCondition";
 	public static final String selectByNameAndPwd=".selectByNameAndPwd";
 	public static final String selectByUserId=".selectByUserId";
-	public static final String getAllCountByNewid=".getAllCountByNewid";
+	public static final String getAllCountByNewid=".selectAllCountByNewid";
 	public static final String selectLastByNewid=".selectLastByNewid";
+	public static final String selectByUsername=".selectByUsername";
 	
 	
 	
@@ -100,6 +101,8 @@ public class Constants {
 	public static final String userMapper_selectByPrimaryKey=root+userMapper+selectByPrimaryKey;
 	public static final String userMapper_deleteByCondition=root+userMapper+deleteByCondition;
 	public static final String userMapper_selectByNameAndPwd=root+userMapper+selectByNameAndPwd;
+	public static final String userMapper_selectByUsername=root+userMapper+selectByUsername;
+	
 	
 	//Admin管理员的操作语句路径
 		public static final int adminPageCounts=5;

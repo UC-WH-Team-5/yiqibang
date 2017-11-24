@@ -17,7 +17,7 @@ function time(o) {
 
 function loginOut() {
 	delCookie("loginuser");
-	$.getJSON("/YiQiBang/UserServlet", {
+	$.getJSON("/yiqibang/UserServlet", {
 		action : "logoutUser"
 	}, function(data) {
 		if (data.retCode == 0) {
@@ -30,7 +30,7 @@ function getUserByIdIndex(userId) {
 	if (userId != null) {
 		$
 				.getJSON(
-						"/YiQiBang/UserServlet",
+						"/yiqibang/UserServlet",
 						{
 							action : "getUserById",
 							userid : userId
@@ -42,7 +42,7 @@ function getUserByIdIndex(userId) {
 												'<li class="dropdown"><a href="#" class="dropdown-toggle"'
 														+ 'data-toggle="dropdown" role="button" aria-haspopup="true"'
 														+ 'aria-expanded="false">'
-														+ data.retData.nickname
+														+ data.retData.uNickname
 														+ '<span class="caret"></span></a>'
 														+ '<ul class="dropdown-menu">'
 														+ '<li class="text-center"><a style="color:gray">修改资料</a></li>'
@@ -75,7 +75,7 @@ $(function() {
 		} else if (code == "") {
 			$("#tip1").text("验证码不能为空");
 		} else {
-			$.getJSON("/YiQiBang/VerificationcodeServlet", {
+			$.getJSON("/yiqibang/VerificationcodeServlet", {
 				action : "searchVerificationcode",
 				mobile : mobile
 			}, function(data) {
@@ -93,7 +93,7 @@ $(function() {
 			});
 		}
 
-	})
+	});
 	$("#sendCode").click(function() {
 		var mobile = $("#mobile").val();
 		var reg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
@@ -102,7 +102,7 @@ $(function() {
 			return;
 		} else {
 			$("#tip1").text("");
-			$.getJSON("/YiQiBang/VerificationcodeServlet", {
+			$.getJSON("/yiqibang/VerificationcodeServlet", {
 				action : "sendVerificationCode",
 				mobile : mobile
 			}, function(data) {
@@ -130,9 +130,7 @@ $(function() {
 		}
 	});
 
-	$("#loginUserSure")
-			.click(
-					function() {
+	$("#loginUserSure").click(function() {	
 						
 						var userName = $("#username").val();
 						var password = $("#password").val();
@@ -142,11 +140,9 @@ $(function() {
 						} else if ($("#innerTv").text().trim() != "验证成功!") {
 							$("#tip").text("请进行验证");
 							return;
-						} else {
+						} else {						
 							$("#tip").text("");
-							$
-									.getJSON(
-											"/YiQiBang/UserServlet",
+							$.getJSON("/yiqibang/UserServlet",
 											{
 												action : "loginUser",
 												username : userName,
@@ -164,7 +160,7 @@ $(function() {
 																	'<li class="dropdown"><a href="#" class="dropdown-toggle"'
 																			+ 'data-toggle="dropdown" role="button" aria-haspopup="true"'
 																			+ 'aria-expanded="false">'
-																			+ data.retData.nickname
+																			+ data.retData.uNickname
 																			+ '<span class="caret"></span></a>'
 																			+ '<ul class="dropdown-menu">'
 																			+ '<li class="text-center"><a style="color:gray">修改资料</a></li>'

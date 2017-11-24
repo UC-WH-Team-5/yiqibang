@@ -28,7 +28,7 @@ $(function() {
 			}
 
 		});
-		$("#sendCode1").click(function() {
+		/*$("#sendCode1").click(function() {
 			var mobile = $("#mobile").val();
 			var reg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
 			if (mobile == "" || !reg.test($("#mobile").val())) {
@@ -64,7 +64,7 @@ $(function() {
 				});
 			}
 		});
-	});
+	});*/
 
 	function checkIpt() {
 		var nickName = $("#nickname").val();

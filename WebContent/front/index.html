@@ -9,7 +9,7 @@
 <script src="../jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript"
 	src="../bootstrap/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/cookie.js"></script>
+<script type="text/javascript" src="js/cookie.js"></script>
 <link rel="stylesheet" href="css/header.css">
 <link rel="stylesheet" href="css/login.css">
 <link rel="stylesheet" href="drag_check/css/slide.css">
@@ -59,7 +59,7 @@
 						"/yiqibang/NewsServlet",
 						{
 							action : "getNewsByTypeId",
-							newsCategory : id
+							typeid : id
 						},
 						function(data) {
 							if (data.retCode == 0) {
@@ -224,7 +224,7 @@
 					$("#evaUser" + index).text(jsData.retData.uNickname);
 					$("#evaUserId" + index).attr(
 							"src",
-							"/yiqibang/AvatarServlet?action=downloadAvatar&username="
+							"/yiqibang/new_imgs/"
 									+ jsData.retData.username);
 				}
 			}

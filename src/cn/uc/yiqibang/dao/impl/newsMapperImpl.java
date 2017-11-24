@@ -23,7 +23,7 @@ import cn.uc.yiqibang.utils.Result;
 
 public class newsMapperImpl implements TNewsMapper {
 
-	TPicMapper picDao=new picMapperImpl();
+
 	TCommentMapper commDao= new commMapperImpl();
 	
 	@Override

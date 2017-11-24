@@ -11,6 +11,8 @@ import com.sun.xml.internal.ws.api.pipe.Tube;
 
 public interface TUserMapper {
 	
+	Result findUserByUserName(String username);
+	
 	Result loginUser(TUser user);
 	
 	Result selectAllByPage(int pageNum); 

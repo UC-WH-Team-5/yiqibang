@@ -149,7 +149,7 @@ ul, li {
 }
 
 .user_tr td {
-	max-width: 100px;
+	max-width: 75px;
 	text-over: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
@@ -285,11 +285,14 @@ ul, li {
 .icon_row .row span:hover {
 	color: red;
 }
+
+#table_head>tr>td{
+height:35px;
+}
 </style>
 <script>
 	$(function() {
 		getPageAllData(1);
-		getAllUser();
 
 		$(".aactive").css({
 			"background" : "#161D22",
@@ -341,6 +344,9 @@ ul, li {
 										+ getStrDate(user.uBirthday.time)
 										+ "</td>"
 										+ "<td>"
+										+ user.uProvinceid+user.uCityid+
+										+ "</td>"
+										+ "<td>"
 										+ user.uBindtel
 										+ "</td>"
 										+ "<td>"
@@ -348,9 +354,6 @@ ul, li {
 										+ "</td>"
 										+ "<td>"
 										+ getStrDate(user.uCreatetime.time)
-										+ "</td>"
-										+ "<td>"
-										+ user.uBindtel
 										+ "</td>"
 										+ "<td>"
 										+ getStrDate(user.uUpdate.time)
@@ -361,14 +364,15 @@ ul, li {
 										+ "<td>"
 										+ user.uRemark
 										+ "</td>"
-										+ "<td id='usertime"+i+"'></td>"
 										+ '<td class="icon_row">'
-										+ '<div class="row">'
 										+ '<div class="col-md-6 text-center">'
 										+ '<span class="glyphicon glyphicon-user" id="adminBtn" onclick="lvlUp('
 										+ user.id
 										+ ')"></span>'
 										+ '</div>'
+										+ '</td>'
+										+ '<td class="icon_row" style="width:50px">'										
+										+ '<div class="row">'										
 										+ '<div class="col-md-6 text-center">'
 										+ '<span class="glyphicon glyphicon-cog configBtn" id="configBtn'+i+'" ></span>'
 										+ '</div>'
@@ -441,7 +445,7 @@ ul, li {
 		$.ajax({
 			url : "/yiqibang/UserServlet",
 			data : {
-				action : "userdeleteAdminById",
+				action : "deleteUserById",
 				userid : userId
 			},
 			type : "post",
@@ -456,6 +460,48 @@ ul, li {
 					location.reload();
 				} else {
 					alert("删除失败");
+				}
+				;
+			},
+			error : function(e) {
+				alert("上传失败");
+			},
+			complet : function() {
+				$('#myModal').modal('hide');
+			}
+
+		})
+	}
+	
+	function lvlUp(){
+		
+		var userid = $("#userid").val();
+		var level= $("#level").val();
+		var state = $("#admin_yes").prop("checked") ? true : false;
+		var data = {
+				level : level,
+				state : state,
+				userid: userid
+		};
+		$.ajax({ 
+			url : "/yiqibang/AdminServlet",
+			data : {
+				action : "InsertAdmin",
+				data:data
+				
+			},
+			type : "post",
+			timeout : 5000,
+			beforesend : function() {
+				$('#myModal').modal('show');
+			},
+			success : function(data) {
+				var jsData = JSON.parse(data);
+				if (jsData.retMsg) {
+					alert("添加成功");
+					location.reload();
+				} else {
+					alert("添加失败");
 				}
 				;
 			},
@@ -514,7 +560,7 @@ ul, li {
 							<li class="uactive"><a>用户</a></li>
 							<li><a href="admin.jsp">管理员</a></li>
 						</ul>
-						<input type="text" class="form-control" placeholder="内容">
+						<input type="text" class="form-control" placeholder="内容" id="searchTv">
 						<span class="input-group-btn">
 							<button class="btn btn-default" type="button"
 								onclick="searchAdminByLike()">
@@ -528,8 +574,8 @@ ul, li {
 				</div>
 
 				<table class="table table-bordered table-stripted">
-					<thead>
-						<tr>
+					<thead id="table_head">
+						<tr >
 							<td>序号</td>
 							<td>用户名</td>
 							<td>昵称</td>
@@ -659,12 +705,62 @@ ul, li {
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="addAdminModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+
+					<h4 class="modal-title" id="myModalLabel">添加管理员</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal">
+					 <div class="form-group">
+							<label class="col-sm-2 control-label">用户</label>
+							<div class="col-sm-8">
+								<select id="userid" name="userid" class="form-control"></select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">等级</label>
+							<div class="col-sm-8">
+								<select id="level" name="level" class="form-control">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+								</select><input
+									type="hidden" id="adminid" value="0">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-2 control-label">是否可用</label>
+							<div class="col-sm-8">
+								<label class="radio-inline"> <input type="radio"
+									name="state" id="admin_yes" value="true" checked>可用
+								</label> <label class="radio-inline"> <input type="radio"
+									name="state" id="admin_no" value="false"> 不可用
+								</label>
+
+							</div>
+						</div>
+
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+					<button type="button" class="btn btn-primary"
+						onclick="addAdminSure()">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<jsp:include page="progress.jsp"></jsp:include>
 </body>
 
 <script type="text/javascript">
 	$("#myModal").modal('show');
-	function addAdminSure() {
+	/* function addUserSure() {
 		var userid = $("#userid").val();
 		var level = $("#level").val();
 		var state = $("#yes").prop("checked") ? true : false;
@@ -707,8 +803,8 @@ ul, li {
 				$('#addAdminModal').modal('hide');
 			}
 
-		})
+		}) 
 
-	}
+	}*/
 </script>
 </html>

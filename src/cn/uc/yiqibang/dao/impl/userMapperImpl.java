@@ -1,9 +1,12 @@
 package cn.uc.yiqibang.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import cn.uc.yiqibang.beans.TAdmin;
 import cn.uc.yiqibang.beans.TUser;
 import cn.uc.yiqibang.beans.TUserExample;
 import cn.uc.yiqibang.dao.TUserMapper;
@@ -11,24 +14,60 @@ import cn.uc.yiqibang.utils.Constants;
 import cn.uc.yiqibang.utils.MyBatisUtils;
 import cn.uc.yiqibang.utils.Result;
 
+
 public class userMapperImpl implements TUserMapper {
 
 	@Override
 	public Result selectAllByPage(int pageNum) {
-		// TODO Auto-generated method stub
-		return null;
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		Map<String, Integer> map=new HashMap<String, Integer>();
+		map.put("startIndex", Constants.userPageCounts*(pageNum-1));
+		map.put("pageCounts", Constants.userPageCounts);
+		List<TAdmin> adminlist=session.selectList(Constants.userMapper_selectAllByPage,map);
+		session.close();
+		if(adminlist!=null){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetMsg(true);
+			result.setRetData(adminlist);
+		}
+		return result;
 	}
 
 	@Override
 	public Result insertSelective(TUser record) {
-		// TODO Auto-generated method stub
-		return null;
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		int row=session.insert(Constants.userMapper_insertSelective,record);
+		session.commit();
+		session.close();
+		if(row>0){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+
+			result.setRetMsg(true);
+		}
+		return result;
 	}
 
 	@Override
 	public Result deleteByPrimaryKey(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		int row=session.delete(Constants.userMapper_deleteByPrimaryKey,id);
+		session.commit();
+		session.close();
+		if(row>0){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetMsg(true);
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -55,8 +94,18 @@ public class userMapperImpl implements TUserMapper {
 
 	@Override
 	public Result selectByLike(String likeStr) {
-		// TODO Auto-generated method stub
-		return null;
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		List<TUser> userlist=session.selectList(Constants.userMapper_selectByLike,likeStr);
+		session.close();
+		if(userlist!=null){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetMsg(true);
+			result.setRetData(userlist);
+		}
+		return result;
 	}
 
 	@Override
@@ -108,5 +157,22 @@ public class userMapperImpl implements TUserMapper {
 		}
 		return result;
 	}
+
+	@Override
+	public Result findUserByUserName(String username) {
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		TUser user0=session.selectOne(Constants.userMapper_selectByUsername,username);
+		session.close();
+		if(user0!=null){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetData(user0);
+			result.setRetMsg(true);
+		}
+		return result;
+	}
+
 
 }

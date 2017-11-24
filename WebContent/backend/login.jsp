@@ -1,8 +1,5 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"
 	contentType="text/html;charset=UTF-8"%>
-<%
-	String appPath = request.getContextPath();
-%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +12,6 @@
 <script src="login.js"></script>
 <link href="login.css" rel="stylesheet">
 <script type="text/javascript">
-	var path = "/yiqibang";
 
 	/**
 	 * 用户登录
@@ -67,7 +63,7 @@
 			$("#tip_l").text("请输入用户名！");
 		} else {
 			$.ajax({
-				url : "/YiQiBang/UserServlet",
+				url : "/yiqibang/UserServlet",
 				data : {
 					action : "findUserByUserName",
 					username : nameName
@@ -184,7 +180,7 @@
 		} else {
 			$("#tip_n").text("");
 			$.ajax({
-				url : "/YiQiBang/UserServlet",
+				url : "/yiqibang/UserServlet",
 				data : {
 					action : "updatePassword",
 					username : nameNameRel,
