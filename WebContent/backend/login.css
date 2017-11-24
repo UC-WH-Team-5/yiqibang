@@ -1,0 +1,71 @@
+@CHARSET "UTF-8";
+
+body {
+	background: #1c314a;
+	background-size: 100% 100%;
+	color: white !important;
+}
+
+h2 {
+	text-align: center;
+	margin-top: 100px;
+	font-family:黑体;
+	font-weight:900px;
+	
+}
+
+#form2 {
+	width: 600px;
+	border: 1px solid black;
+	margin: 10px auto;
+	padding: 80px 80px;
+	font-size: 13px;
+	background: rgba(0, 0, 0, 0.3);
+	position: relative;
+	font-family:微软雅黑
+}
+
+.form-group.first{
+	margin-top:40px
+}
+
+#right_img {
+	position: absolute;
+	left: 200px;
+	top:40px;
+	width: 190px;
+	height: 63px;
+} 
+
+.left_margin{
+	margin-left:30px;
+}
+.btn-sm{
+	padding:3px 15px;
+}
+.btn_box{
+	margin-top:20px;
+}
+#tip{
+	color:red;
+}
+#validate_box .media{
+	margin-bottom:20px;
+	margin-top:5px;
+}
+#validate_box .media-left img{
+	width:130px;
+	height:40px;
+}
+#validate_box .media-body{
+	vertical-align:bottom;
+}
+#validate_box .media-body p{
+	margin-bottom:0;
+	height:40px;
+	line-height:40px;
+	margin-left:20px;
+}
+#userValidate{
+	max-width:110px;
+}

@@ -4,12 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>管理员</title>
+<title>用户</title>
 <script type="text/javascript" src="../jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="../js/page.js"></script>
 <link rel="stylesheet" href="../bootstrap/dist/css/bootstrap.min.css">
 <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="../js/date_util.js"></script>
+<script src="../js/area.ui.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <script type="text/javascript" src="js/uEditer/ueditor.config.js"></script>
@@ -143,11 +144,11 @@ ul, li {
 	margin: 275px 13.5px 0 13.5px;
 }
 
-.admin_tr>td>div {
+.user_tr>td>div {
 	height: 30px;
 }
 
-.admin_tr td {
+.user_tr td {
 	max-width: 100px;
 	text-over: ellipsis;
 	white-space: nowrap;
@@ -163,7 +164,7 @@ ul, li {
 	vertical-align: middle !important;
 }
 
-.admin_tr>td>div {
+.user_tr>td>div {
 	height: 35px;
 }
 
@@ -187,7 +188,6 @@ ul, li {
 	bottom: 0px;
 	left: 320px;
 }
-
 
 #content .right nav>ul {
 	margin: 0;
@@ -296,15 +296,15 @@ ul, li {
 			"color" : "#E1E2E3"
 		});
 		$(".aactive>img:last-child").css("display", "block");
-		$(".uactive").css("background","#FFA705")
-
-		showPageBox("/yiqibang/AdminServlet", "getAllAdminCount");
+		$(".uactive").css("background", "#FFA705")
+		$(document).area("s_province", "s_city", "s_county");
+		showPageBox("/yiqibang/UserServlet", "getAllUserCount");
 
 	});
 
 	function getPageAllData(pageNum) {
 		$('#myModal').modal('show');
-		$.getJSON("/yiqibang/AdminServlet", {
+		$.getJSON("/yiqibang/UserServlet", {
 			action : "getPageAllData",
 			pageNum : pageNum,
 		}, function(data) {
@@ -315,122 +315,90 @@ ul, li {
 
 	function showAllData(data, pageNum) {
 		if (data.retMsg) {
-			$("#adminList_body").html("");
-			var adminList = data.retData;
-			for (var i = 0; i < adminList.length; i++) {
-				var admin = adminList[i];
-				console.log(admin);
-				$("#adminList_body")
+			$("#userList_body").html("");
+			var userList = data.retData;
+			for (var i = 0; i < userList.length; i++) {
+				var user = userList[i];
+				console.log(user);
+				$("#userList_body")
 						.append(
-								'<tr align="center" class="admin_tr">' + "<td>"
+								'<tr align="center" class="user_tr">' + "<td>"
 										+ ((pageNum - 1) * pageSize + i + 1)
 										+ "</td>"
-										+ "<td id='user"+i+"'></td>"
 										+ "<td>"
-										+ admin.uLevel
+										+ user.uUsername
 										+ "</td>"
 										+ "<td>"
-										+ (admin.uState?"可用":"不可用")
+										+ user.uNickname
 										+ "</td>"
-										+ "<td id='usertime"+i+"'></td>"										
+										+ "<td>"
+										+ user.uPassword
+										+ "</td>"
+										+ "<td>"
+										+ (user.uSex ? "男" : "女")
+										+ "</td>"
+										+ "<td>"
+										+ getStrDate(user.uBirthday.time)
+										+ "</td>"
+										+ "<td>"
+										+ user.uBindtel
+										+ "</td>"
+										+ "<td>"
+										+ (user.uState ? "可用" : "不可用")
+										+ "</td>"
+										+ "<td>"
+										+ getStrDate(user.uCreatetime.time)
+										+ "</td>"
+										+ "<td>"
+										+ user.uBindtel
+										+ "</td>"
+										+ "<td>"
+										+ getStrDate(user.uUpdate.time)
+										+ "</td>"
+										+ "<td>"
+										+ user.uHeading
+										+ "</td>"
+										+ "<td>"
+										+ user.uRemark
+										+ "</td>"
+										+ "<td id='usertime"+i+"'></td>"
 										+ '<td class="icon_row">'
 										+ '<div class="row">'
+										+ '<div class="col-md-6 text-center">'
+										+ '<span class="glyphicon glyphicon-user" id="adminBtn" onclick="lvlUp('
+										+ user.id
+										+ ')"></span>'
+										+ '</div>'
 										+ '<div class="col-md-6 text-center">'
 										+ '<span class="glyphicon glyphicon-cog configBtn" id="configBtn'+i+'" ></span>'
 										+ '</div>'
 										+ '<div class="col-md-6 text-center">'
 										+ '<span class="glyphicon glyphicon-trash" id="deleteBtn'
-										+ i + '" onclick="deleteAdmin('
-										+ admin.id + ')"></span>' + '</div>'
+										+ i + '" onclick="deleteUser('
+										+ user.id + ')"></span>' + '</div>'
 										+ '</div>' + '</td>' + "</tr>");
-				$("#content" + i).attr("title", $("#content" + i).text());
-				getUserById(admin.tUId, i);
-				
+
 			}
 			$(".configBtn").each(function(index) {
 				$("#configBtn" + index).click(function() {
-					var admin = adminList[index];
+					var user = userList[index];
 					$('#addAdminModal').modal('show');
 					$("#myModalLabel").text("修改管理员");
-					$('#addAdminModal #userid').val(admin.tUId);
-					$('#addAdminModal #level').val(admin.uLevel);
-					$('#adminid').val(admin.id);
-					if(admin.uState){
-						$("#yes").attr("checked",true);
+					$('#addAdminModal #userid').val(user.tUId);
+					$('#addAdminModal #level').val(user.uLevel);
+					$('#userid').val(user.id);
+					if (user.uState) {
+						$("#yes").attr("checked", true);
 						$("#no").removeAttr("checked");
-					}else{
-						$("#no").attr("checked",true);
+					} else {
+						$("#no").attr("checked", true);
 						$("#yes").removeAttr("checked");
 					}
-					
 
 				})
 			});
 			$('#myModal').modal('hide');
 		}
-	}
-
-	function getUserById(userId, index) {
-		$.ajax({
-			url : "/yiqibang/UserServlet",
-			data : {
-				action : "adminGetUserById",
-				id : userId
-			},
-			timeout : 5000,
-			type : "get",
-			beforesend : function() {
-				$('#myModal').modal('show');
-			},
-			success : function(data) {
-
-				var objData = JSON.parse(data);
-				if (objData.retMsg) {
-					$("#user" + index).text(objData.retData.uUsername);
-					$("#usertime"+index).text(getStrDate(objData.retData.uCreatetime.time));
-				}
-			},
-			error : function(e) {
-				alert("类型获取异常" + e);
-			},
-			complet : function(e) {
-				$('#myModal').modal('hide');
-			}
-		})
-	}
-
-
-
-	function getAllUser() {
-		$.ajax({
-			url : "/yiqibang/UserServlet",
-			data : {
-				action : "GetAllUser"
-			},
-			type : "get",
-			timeout : 5000,
-			beforesend : function() {
-				$('#myModal').modal('show');
-			},
-			success : function(data) {
-				var jsData = JSON.parse(data);
-				console.log(jsData)
-				$("#userid").html("");
-				for (var i = 0; i < jsData.retData.length; i++) {
-					var user = jsData.retData[i];
-					$("#userid").append(
-							"<option value='"+user.id+"'>" + user.uUsername
-									+ '</option>');
-				}
-			},
-			error : function(e) {
-				alert("类型获取异常" + e); 
-			},
-			complet : function(e) {
-				$('#myModal').modal('hide');
-			}
-
-		})
 	}
 
 	function addAdminBtn() {
@@ -444,9 +412,9 @@ ul, li {
 		} else {
 
 			$.ajax({
-				url : "/yiqibang/AdminServlet",
+				url : "/yiqibang/UserServlet",
 				data : {
-					action : "adminGetAdminByLike",
+					action : "userGetAdminByLike",
 					likeStr : searchTv
 				},
 				type : "get",
@@ -469,12 +437,12 @@ ul, li {
 		}
 	}
 
-	function deleteAdmin(adminId) {
+	function deleteAdmin(userId) {
 		$.ajax({
-			url : "/yiqibang/AdminServlet",
+			url : "/yiqibang/UserServlet",
 			data : {
-				action : "admindeleteAdminById",
-				adminid : adminId
+				action : "userdeleteAdminById",
+				userid : userId
 			},
 			type : "post",
 			timeout : 5000,
@@ -543,12 +511,13 @@ ul, li {
 				<div class="container-fluid con_header clear">
 					<div class="input-group">
 						<ul class="clear">
-							<li ><a>用户</a></li>
-							<li class="uactive"><a>管理员</a></li>
+							<li class="uactive"><a>用户</a></li>
+							<li><a>管理员</a></li>
 						</ul>
 						<input type="text" class="form-control" placeholder="内容">
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" onclick="searchAdminByLike()">
+							<button class="btn btn-default" type="button"
+								onclick="searchAdminByLike()">
 								<img src="img/public/fangdajing.png">
 							</button>
 						</span>
@@ -563,13 +532,22 @@ ul, li {
 						<tr>
 							<td>序号</td>
 							<td>用户名</td>
-							<td>等级</td>
+							<td>昵称</td>
+							<td>密码</td>
+							<td>性别</td>
+							<td>生日</td>
+							<td>地址</td>
+							<td>手机号码</td>
 							<td>状态</td>
 							<td>创建时间</td>
+							<td>修改时间</td>
+							<td>头像</td>
+							<td>备注</td>
+							<td>设为管理员</td>
 							<td>操作</td>
 						</tr>
 					</thead>
-					<tbody id="adminList_body">
+					<tbody id="userList_body">
 
 
 
@@ -587,40 +565,90 @@ ul, li {
 			<div class="modal-content">
 				<div class="modal-header">
 
-					<h4 class="modal-title" id="myModalLabel">添加管理员</h4>
+					<h4 class="modal-title" id="myModalLabel">添加用户</h4>
 				</div>
 				<div class="modal-body">
 					<form class="form-horizontal">
-					 <div class="form-group">
-							<label class="col-sm-2 control-label">用户</label>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">用户名</label>
 							<div class="col-sm-8">
-								<select id="userid" name="userid" class="form-control"></select>
+								<input type="text" class="form-control" id="username"
+									name="username" placeholder="用户名" value=""><input
+									type="hidden" id="userid" value="0">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label">等级</label>
+							<label class="col-sm-2 control-label">昵称</label>
 							<div class="col-sm-8">
-								<select id="level" name="level" class="form-control">
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-								</select><input
-									type="hidden" id="adminid" value="0">
+								<input type="text" class="form-control" id="nickrname"
+									name="nickrname" placeholder="昵称" value="">
 							</div>
 						</div>
-
+						<div class="form-group">
+							<label class="col-sm-2 control-label">密码</label>
+							<div class="col-sm-8">
+								<input type="password" class="form-control" id="password"
+									name="password" placeholder="密码" value="">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">性别</label>
+							<div class="col-sm-8">
+								<label class="radio-inline"> <input type="radio"
+									name="state" id="sex_yes" value="true" checked>男
+								</label> <label class="radio-inline"> <input type="radio"
+									name="state" id="sex_no" value="false"> 女
+								</label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">生日</label>
+							<div class="col-sm-8">
+								<input type="date" class="form-control" id="birthday"
+									name="birthday" placeholder="生日" value="">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">地址</label>
+							<div class="col-sm-8">
+								<select id="s_province" name="s_province"></select> <select
+									id="s_city" name="s_city"></select> <select id="s_county"
+									name="s_county"></select> <input type="hidden" id="userid"
+									value="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">手机号码</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="tel"
+									name="tel" placeholder="电话号码" value="">
+							</div>
+						</div>
 						<div class="form-group">
 							<label class="col-sm-2 control-label">是否可用</label>
 							<div class="col-sm-8">
 								<label class="radio-inline"> <input type="radio"
-									name="state" id="yes" value="true" checked>可用
+									name="state" id="state_yes" value="true" checked>可用
 								</label> <label class="radio-inline"> <input type="radio"
-									name="state" id="no" value="false"> 不可用
+									name="state" id="state_no" value="false"> 不可用
 								</label>
 
 							</div>
 						</div>
-
+						<div class="form-group">
+							<label class="col-sm-2 control-label">头像</label>
+							<div class="col-sm-8">
+								<input type="file" class="form-control" id="headimg"
+									name="headimg" placeholder="选择头像" value="">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">备注</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="remark"
+									name="remark" placeholder="电话号码" value="">
+							</div>
+						</div>
 					</form>
 				</div>
 				<div class="modal-footer">
@@ -635,31 +663,31 @@ ul, li {
 </body>
 
 <script type="text/javascript">
-	$("#myModal").modal('show');	
+	$("#myModal").modal('show');
 	function addAdminSure() {
 		var userid = $("#userid").val();
-		var level= $("#level").val();
+		var level = $("#level").val();
 		var state = $("#yes").prop("checked") ? true : false;
 		var model_title = $("#myModalLabel").text();
-		
+
 		var data = {
-				level : level,
-				state : state,
-				userid: userid
+			level : level,
+			state : state,
+			userid : userid
 		};
-		if (userid == "" || level == "" || state == "") {
+		if (userid == "" || newsid == "" || thumbcount == "") {
 			alert("请输入内容");
 			return;
 		}
-		if (model_title == "修改管理员") {
-			data.adminid = $("#adminid").val();
-			data.action = "adminUpdateAdmin";
+		if (model_title == "修改用户") {
+			data.userid = $("#userid").val();
+			data.action = "userUpdateAdmin";
 		} else {
-			data.action = "adminInsertAdmin";
+			data.action = "userInsertAdmin";
 		}
 
 		$.ajax({
-			url : "/yiqibang/AdminServlet",
+			url : "/yiqibang/UserServlet",
 			data : data,
 			timeout : 5000,
 			beforesend : function() {

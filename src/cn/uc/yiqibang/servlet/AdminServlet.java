@@ -53,12 +53,12 @@ public class AdminServlet extends BaseServlet {
 		WriteResultToClient.WriteMethod(response, result);
 	}
 	
-/*	public void adminGetAdminByLike(HttpServletRequest request,HttpServletResponse response){
+	public void adminGetAdminByLike(HttpServletRequest request,HttpServletResponse response){
 		String likeStr=request.getParameter("likeStr");
 		Result result=adminDao.selectByLike("%"+likeStr+"%");
 		WriteResultToClient.WriteMethod(response, result);	
 	}
-	*/
+	
 	public void admindeleteAdminById(HttpServletRequest request,HttpServletResponse response){
 		int adminid=Integer.parseInt(request.getParameter("adminid"));					
 		Result result=adminDao.deleteByPrimaryKey(adminid);
