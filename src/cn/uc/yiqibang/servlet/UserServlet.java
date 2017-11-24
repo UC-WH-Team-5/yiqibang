@@ -35,5 +35,10 @@ public class UserServlet extends BaseServlet {
 		WriteResultToClient.WriteMethod(response, result);		
 	}
 	
+	public void getUserById(HttpServletRequest request, HttpServletResponse response){
+		int userid=Integer.parseInt(request.getParameter("userid"));
+		Result result=userDao.selectByPrimaryKey(userid);
+		WriteResultToClient.WriteMethod(response, result);		
+	}
 
 }

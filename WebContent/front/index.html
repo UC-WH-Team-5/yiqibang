@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>新闻浏览</title>
+<link rel="stylesheet"
+	href="../bootstrap/dist/css/bootstrap.min.css">
+<link href="index.css" rel="stylesheet">
+<script src="../jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript"
+	src="../bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/cookie.js"></script>
+<link rel="stylesheet" href="css/header.css">
+<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="drag_check/css/slide.css">
+<script src="drag_check/js/slide.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+<script type="text/javascript" src="js/register.js"></script>
+<script>
+	$(function() {
+		$("#loginUser").click(function() {
+			resetData();
+			$(".nav-tabs>li").removeClass("active");
+			$(".nav-tabs>li").first().addClass("active");
+			$("#loginModal").modal('show');
+		});
+		$("#cateList").html("");
+		$.getJSON("/yiqibang/TypeServlet", {
+			action : "getAllTypes"
+		},
+				function(data) {
+					if (data.retCode == 0) {
+						var catelist = data.retData;
+						for (var i = 0; i < catelist.length; i++) {
+							var cat = catelist[i];
+							$("#cateList").append(
+									'<a class="list-group-item" id="catImte'
+											+ cat.id + '" '
+											+ 'onclick="getNewsByCatId('
+											+ cat.id + ',&apos;'
+											+ cat.tName + '&apos;)"><p>'
+											+ cat.tName + '</p></a>');
+						}
+						getNewsByCatId(catelist[0].id,
+								catelist[0].tName);
+					}
+				});
+	});
+
+	function getNewsByCatId(id, catName) {
+		$("#cateList").find("a").removeClass("active");
+		$("#catImte" + id).addClass("active");
+
+		$("#three_grid").html("");
+		$("#carousel_circle").html("");
+		$("#carousel_imgs").html("");
+		$
+				.getJSON(
+						"/yiqibang/NewsServlet",
+						{
+							action : "getNewsByTypeId",
+							newsCategory : id
+						},
+						function(data) {
+							if (data.retCode == 0) {
+								var newsList = data.retData;
+								for (var i = 0; i < newsList.length; i++) {
+									var newCur = newsList[i];
+									var imgStrs = newCur.nPics;
+									var imgArr = new Array();
+									if (imgStrs != null && imgStrs != "") {
+										imgArr = imgStrs.split(",");
+									}
+									if (i < 3) {
+										var circle = "";
+										var imgs = "";
+										if (i == 0) {
+											circle = '<li data-target="#carousel-example-generic" data-slide-to="'+i+'" class="active"></li>';
+											imgs = '<div class="item active">'
+													+ '<img src="'
+													+ imgArr[0]
+													+ '" alt="" onclick="info_new('
+													+ newCur.id
+													+ ',&apos;'
+													+ catName
+													+ '&apos;)">'
+													+ '<div class="carousel-caption">'
+													+ ' <span onclick="info_new('
+													+ newCur.id + ',&apos;'
+													+ catName + '&apos;)">'
+													+ newCur.nTitle + '</span>'
+													+ ' </div>' + ' </div>';
+										} else {
+											circle = '<li data-target="#carousel-example-generic" data-slide-to="'+i+'"></li>';
+											imgs = '<div class="item">'
+													+ '<img src="'
+													+ imgArr[0]
+													+ '" alt="" onclick="info_new('
+													+ newCur.id
+													+ ',&apos;'
+													+ catName
+													+ '&apos;)">'
+													+ '<div class="carousel-caption">'
+													+ ' <span onclick="info_new('
+													+ newCur.id + ',&apos;'
+													+ catName + '&apos;)">'
+													+ newCur.nTitle + '</span>'
+													+ ' </div>' + ' </div>';
+										}
+										$("#carousel_circle").append(circle);
+										$("#carousel_imgs").append(imgs);
+									} else {
+										var itemNew = '<div class="row_three" onclick="info_new('
+												+ newCur.id
+												+ ',&apos;'
+												+ catName
+												+ '&apos;)">'
+												+ '<h4>'
+												+ newCur.nTitle
+												+ '</h4>';
+										if (imgArr.length == 0) {
+											itemNew += "";
+										} else {
+											itemNew += '<div class="row img_box">'
+													+ '<div class="col-md-4">'
+													+ '<img alt="" src="'+imgArr[0]+'">'
+													+ '</div>'
+													+ '<div class="col-md-4">'
+													+ '<img alt="" src="'+imgArr[1]+'">'
+													+ '</div>'
+													+ '<div class="col-md-4">'
+													+ '<img alt="" src="'+imgArr[2]+'">'
+													+ '</div>' + '</div>';
+										}
+										itemNew += '<div class="row eval_box">'
+												+ '<div class="col-md-6">'
+												+ '<img id="evaUserId'+i+'" src="img/content_tu_04_24.jpg"> '
+												+ '<span id="evaUser'+i+'"></span> '
+												+ '<span id="evaTime'+i+'"></span>'
+												+ '</div>'
+												+ '<div class="col-md-6 text-right">'
+												+ '<span id="evaCount'+i+'"></span>'
+												+ '<span><i class="glyphicon glyphicon-eye-open"></i>&nbsp;'
+												+ newCur.nReadcount + '次</span>'
+												+ '</div>' + '</div>'
+												+ '</div>';
+										$("#three_grid").append(itemNew);
+
+										getLastEvaluateByNewid(newCur.id, i);
+										getAllCountByNewid(newCur.id, i);
+									}
+
+								}
+							}
+						});
+
+	}
+	//根据新闻id获取评论人数
+	function getAllCountByNewid(newsid, index) {
+		$.ajax({
+			url : "/yiqibang/CommServlet",
+			data : {
+				action : "getAllCountByNewid",
+				newsid : newsid
+			},
+			type : "get",
+			timeout : 5000,
+			success : function(data) {
+				var jsData = JSON.parse(data);
+				if (jsData.retCode == 0) {
+					$("#evaCount" + index).html(
+							"&nbsp;&nbsp;&nbsp;<i class='glyphicon glyphicon-comment'></i>&nbsp;"
+									+ jsData.retData + "次");
+				}
+			}
+		});
+	}
+
+	//根据新闻id获取最近评论信息
+	function getLastEvaluateByNewid(newsid, index) {
+		$.ajax({
+			url : "/yiqibang/CommServlet",
+			data : {
+				action : "getLastCommByNewid",
+				newsid : newsid
+			},
+			type : "get",
+			timeout : 5000,
+			success : function(data) {
+				var jsData = JSON.parse(data);
+				if (jsData.retCode == 0) {
+					var evaTimeObj = jsData.retData.createtime;
+					var evaUserid = jsData.retData.userid;
+					var time = new Date().getTime() - parseInt(evaTimeObj);
+					var timeStrses = "";
+					if (time < 60 * 60 * 1000) {
+						timeStrses = Math.ceil(time / 1000 / 60) + "分钟前";
+					} else if (time > 60 * 60 * 1000
+							&& time < 24 * 60 * 60 * 1000) {
+						timeStrses = Math.ceil(time / 1000 / 60 / 60) + "小时前";
+					} else {
+						timeStrses = Math.ceil(time / 1000 / 60 / 60 / 24)
+								+ "小时前";
+					}
+					$("#evaTime" + index).text(timeStrses);
+					getUserInfoById(evaUserid, index);
+				}
+			}
+		});
+	}
+
+	function getUserInfoById(userid, index) {
+		$.ajax({
+			url : "/yiqibang/UserServlet",
+			data : {
+				action : "getUserById",
+				userid : userid
+			},
+			type : "get",
+			timeout : 5000,
+			success : function(data) {
+				var jsData = JSON.parse(data);
+				if (jsData.retCode == 0) {
+					$("#evaUser" + index).text(jsData.retData.uNickname);
+					$("#evaUserId" + index).attr(
+							"src",
+							"/yiqibang/AvatarServlet?action=downloadAvatar&username="
+									+ jsData.retData.username);
+				}
+			}
+		});
+	}
+	function info_new(newsid, catName) {
+		window.open(decodeURI("news.html?newsid=" + newsid + "&catname="
+				+ catName));
+	}
+</script>
+</head>
+<style>
+.navbar-header {
+	position: relative;
+}
+
+.logo_div {
+	width: 160px;
+	height: 80px;
+	background: rgb(41, 156, 219);
+	position: absolute;
+	padding: 23px 29px;
+}
+
+.logo_div img {
+	width: 102px;
+	height: 34px;
+}
+
+.logo_box #header a.navbar-brand {
+	height: 32px;
+	line-height: 32px;
+	padding: 0;
+	margin-left: 170px;
+	color: lightgray;
+	font-weight: 700
+}
+</style>
+<body>
+	<div id="page">
+		<div class="logo_box">
+			<div id="header">
+				<nav class="navbar navbar-default">
+					<div class="container">
+						<div class="navbar-header">
+							<div class="logo_div">
+								<img src="img/logo.png">
+							</div>
+							<a class="navbar-brand" href="#">新闻中心</a>
+						</div>
+						<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse"
+							id="bs-example-navbar-collapse-1">
+							<ul class="nav navbar-nav" id="cat_top">
+							</ul>
+							<ul class="nav navbar-nav navbar-right">
+								<li id="loginBtn"></li>
+								<li><a href="#">下载App</a></li>
+								<li><a href="#">反馈</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+			</div>
+
+		</div>
+		<div id="search_box" class="row">
+			<div class="col-md-4 col-md-offset-4">
+				<div class="input-group">
+					<input type="text" class="form-control"
+						placeholder="大家都在搜:优才创智B轮投资" aria-describedby="basic-addon2">
+					<span class="input-group-addon" id="basic-addon2"> <img
+						class="img" src="img/sousuo.png">
+					</span>
+				</div>
+			</div>
+		</div>
+		<div id="content" class="container">
+			<div class="row">
+				<div class="col-md-2 left_box">
+					<div class="list-group my-list text-center" id="cateList"></div>
+				</div>
+				<div class="col-md-7 center_box">
+					<div id="newsCoursel" class="carousel slide" data-ride="carousel">
+						<!-- Indicators -->
+						<ol class="carousel-indicators" id="carousel_circle">
+						</ol>
+
+						<!-- Wrapper for slides -->
+						<div class="carousel-inner" role="listbox" id="carousel_imgs">
+
+						</div>
+
+						<!-- Controls -->
+						<a class="left carousel-control" href="#newsCoursel" role="button"
+							data-slide="prev"> <span
+							class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+							<span class="sr-only">Previous</span>
+						</a> <a class="right carousel-control" href="#newsCoursel"
+							role="button" data-slide="next"> <span
+							class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+							<span class="sr-only">Next</span>
+						</a>
+					</div>
+					<div id="three_grid"></div>
+				</div>
+				<div class="col-md-3 right_box">
+					<div class="hours_box">
+						<h3>24小时新闻</h3>
+						<div class="media">
+							<div class="media-left media-middle">
+								<a href="#"> <img class="media-object"
+									src="img/right_tu_01_03.jpg">
+								</a>
+							</div>
+							<div class="media-body">
+								<p>笑死人不偿命给的一百种作死的方式,你知道几种?</p>
+							</div>
+						</div>
+						<div class="media">
+							<div class="media-left media-middle">
+								<a href="#"> <img class="media-object"
+									src="img/right_tu_01_03.jpg">
+								</a>
+							</div>
+							<div class="media-body">
+								<p>笑死人不偿命给的一百种作死的方式,你知道几种?</p>
+							</div>
+						</div>
+						<div class="media">
+							<div class="media-left media-middle">
+								<a href="#"> <img class="media-object"
+									src="img/right_tu_01_03.jpg">
+								</a>
+							</div>
+							<div class="media-body">
+								<p>笑死人不偿命给的一百种作死的方式,你知道几种?</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="hours_box">
+						<h3>精彩图片</h3>
+						<div class="media">
+							<div class="media-left media-middle">
+								<a href="#"> <img class="media-object"
+									src="img/right_tu_01_03.jpg">
+								</a>
+							</div>
+							<div class="media-body">
+								<p>笑死人不偿命给的一百种作死的方式,你知道几种?</p>
+							</div>
+						</div>
+						<div class="media">
+							<div class="media-left media-middle">
+								<a href="#"> <img class="media-object"
+									src="img/right_tu_01_03.jpg">
+								</a>
+							</div>
+							<div class="media-body">
+								<p>笑死人不偿命给的一百种作死的方式,你知道几种?</p>
+							</div>
+						</div>
+						<div class="media">
+							<div class="media-left media-middle">
+								<a href="#"> <img class="media-object"
+									src="img/right_tu_01_03.jpg">
+								</a>
+							</div>
+							<div class="media-body">
+								<p>笑死人不偿命给的一百种作死的方式,你知道几种?</p>
+							</div>
+						</div>
+					</div>
+					<div class="hours_box">
+						<h3>更多</h3>
+						<div class="row foot_tip">
+							<div class="col-md-3">
+								<a href="#">关于头条</a>
+							</div>
+							<div class="col-md-3">
+								<a href="#">加入头条</a>
+							</div>
+							<div class="col-md-3">
+								<a href="#">媒体报道</a>
+							</div>
+							<div class="col-md-3">
+								<a href="#">媒体合作</a>
+							</div>
+						</div>
+						<div class="row foot_tip">
+							<div class="col-md-3">
+								<a href="#">产品合作</a>
+							</div>
+							<div class="col-md-3">
+								<a href="#">合作说明</a>
+							</div>
+							<div class="col-md-3">
+								<a href="#">广告投放</a>
+							</div>
+							<div class="col-md-3">
+								<a href="#">联系我们</a>
+							</div>
+						</div>
+						<div class="row foot_tip">
+							<div class="col-md-3">
+								<a href="#">用户协议</a>
+							</div>
+							<div class="col-md-3">
+								<a href="#">侵权投诉</a>
+							</div>
+							<div class="col-md-3">
+								<a href="#">廉洁举报</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 登录框 -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="loginModal"
+		data-backdrop="false" style="background: rgba(0, 0, 0, 0.5)">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content col-md-8 col-md-offset-2">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">用户登录</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12">
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="col-md-6 active"><a
+									href="#account" aria-controls="account" role="tab"
+									data-toggle="tab">账号登录</a></li>
+								<li role="presentation" class="col-md-6"><a href="#phone"
+									aria-controls="phone" role="tab" data-toggle="tab">手机登录</a></li>
+							</ul>
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="account">
+									<form id="nameForm">
+										<div class="form-group">
+											<input type="text" class="form-control" id="username"
+												placeholder="用户名">
+										</div>
+										<div class="form-group">
+											<input type="password" class="form-control" id="password"
+												placeholder="用户密码">
+										</div>
+										<div class="form-group">
+											<label class="checkbox-inline"> <input
+												type="checkbox" name="remember_pwd" id="remember_pwd" value="option1">
+												记住密码
+											</label> <label class="checkbox-inline"> <input
+												type="checkbox" name="auto_login" id="auto_login" value="option2">
+												自动登录
+											</label>
+										</div>
+										<div class="form-group">
+											<div id="parent">
+												<span id="innerTv">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+													&nbsp;按住滑块右移</span>
+												<div id="div1"></div>
+											</div>
+										</div>
+										<div class="form-group">
+											<p id="tip" style="color: red"></p>
+										</div>
+										<div class="form-group">
+											<a type="button" class="btn btn-sm btn-default register_btn"
+												id="registerUser">注册</a>
+											<button type="button"
+												class="btn btn-sm btn-primary register_btn"
+												id="loginUserSure">登录</button>
+										</div>
+									</form>
+
+								</div>
+								<div role="tabpanel" class="tab-pane" id="phone">
+									<form>
+										<div class="form-group">
+											<input type="text" class="form-control" id="mobile"
+												placeholder="手机号">
+										</div>
+										<div class="form-group">
+											<input type="text" class="form-control" id="code"
+												placeholder="验证码">
+										</div>
+										<div class="form-group">
+											<p id="tip1" style="color: red"></p>
+										</div>
+										<button id="login_phone" type="button" class="btn btn-default">登陆</button>
+										<input id="sendCode" type="button" class="btn btn-default"
+											value="免费获取验证码" />
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!-- 注册框 -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="registerModal"
+		data-backdrop="false" style="background: rgba(0, 0, 0, 0.5)">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content col-md-10 col-md-offset-1">
+				<div id="register_box">
+					<div class="panel panel-default">
+						<div class="panel-heading">注册用户</div>
+						<div class="panel-body">
+							<div class="col-md-12">
+								<ul class="nav nav-tabs" role="tablist">
+									<li role="presentation" class="col-md-6 active"><a
+										href="#phone" aria-controls="phone" role="tab"
+										data-toggle="tab">手机注册</a></li>
+									<li role="presentation" class="col-md-6 disabled"><a
+										href="#email" aria-controls="email" role="tab"
+										data-toggle="tab">邮箱注册</a></li>
+								</ul>
+
+								<!-- Tab panes -->
+								<div class="tab-content">
+									<div role="tabpanel" class="tab-pane active" id="phone">
+										<form class="form-horizontal my_login_f">
+											<div class="form-group">
+												<label for="nickname" class="col-sm-3 control-label">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" id="nickname"
+														name="nickname" placeholder="请输入昵称">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="username" class="col-sm-3 control-label">用&nbsp;&nbsp;户&nbsp;名:</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" id="username1"
+														name="username" placeholder="请输入用户名"> <input
+														type="hidden" name="action">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="bindphone" class="col-sm-3 control-label">手&nbsp;&nbsp;机&nbsp;号:</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" id="mobile1"
+														name="bindphone" placeholder="请输入手机号"> <input
+														type="hidden" name="action">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="code" class="col-sm-3 control-label">验&nbsp;&nbsp;证&nbsp;码:</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input type="text" class="form-control" id="code1"
+															placeholder="验证码"> <span class="input-group-btn">
+															<input class="btn btn-default" type="button"
+																id="sendCode1" value="发送">
+														</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label for="password" class="col-sm-3 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
+												<div class="col-sm-9">
+													<input type="password" class="form-control" id="password1"
+														name="password" placeholder="6-16位英文（区分大小写）、数字或常用字符">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="sure_password" class="col-sm-3 control-label">确认密码:</label>
+												<div class="col-sm-9">
+													<input type="password" class="form-control"
+														id="sure_password1" placeholder="请再次输入密码">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="checkbox col-sm-offset-4"> <input
+													type="checkbox" id="inlineCheckbox1" value="option1">
+													已读并同意<a href="#">《宜企帮使用协议》</a>
+												</label>
+											</div>
+											<div class="form-group">
+												<p id="tip2" class="col-sm-offset-4" style="color: red"></p>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-offset-4 col-sm-3">
+													<button type="button" class="btn btn-primary btn-sm "
+														id="registerBtn">注册</button>
+												</div>
+												<div class="col-sm-offset-4 ">
+													<input type="reset" class="btn btn-default btn-sm" value="取消" onclick="$('#registerModal').modal('hide')">
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	var loginUser = getCookieValue("loginuser");//loginuser
+	if (loginUser != null) {
+		getUserByIdIndex(loginUser);
+	} else {
+		$("#loginBtn").html('<a id="loginUser"><p>登陆</p></a>');
+	}
+</script>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

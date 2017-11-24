@@ -46,13 +46,14 @@ public class NewsServlet extends BaseServlet {
 		String content=request.getParameter("content");
 		String editorValue=request.getParameter("editorValue");
 		boolean ifhot=Boolean.parseBoolean(request.getParameter("ifhot"));
-		 List<String> list = ImgUtil.getImageSrc(content);  
-		 String picturePath = ImgUtil.listToString(list, ',');
-		
 		TNews record=new TNews();
+		 List<String> list = ImgUtil.getImageSrc(content);  
+		 if (list.size() > 0) {
+		 String picturePath = ImgUtil.listToString(list, ',');
+		 record.setnPics(picturePath);
+		 }
 		record.settTId(typeid);
 		record.setnTitle(title);
-		record.setnPics(picturePath);
 		record.setnContent(editorValue);
 		record.setnSource(source);
 		record.setnAuthor(author);
@@ -72,14 +73,19 @@ public class NewsServlet extends BaseServlet {
 		String editorValue=request.getParameter("editorValue");
 		boolean ifhot=Boolean.parseBoolean(request.getParameter("ifhot"));
 		int newsid=Integer.parseInt(request.getParameter("newsid"));
-		//从content里面获取图片列表
-		 List<String> list = ImgUtil.getImageSrc(content);  
-		 String picturePath = ImgUtil.listToString(list, ',');
 		
 		TNews record=new TNews();
+		
+		//从content里面获取图片列表
+		 List<String> list = ImgUtil.getImageSrc(content); 
+			if (list.size() > 0) {
+		 String picturePath = ImgUtil.listToString(list, ',');
+		 record.setnPics(picturePath);
+			}
+		
 		record.settTId(typeid);
 		record.setnTitle(title);
-		record.setnPics(picturePath);
+		
 		record.setnContent(editorValue);
 		record.setnSource(source);
 		record.setnAuthor(author);

@@ -515,11 +515,22 @@ public class TUser {
     public void setuAreaid(Integer uAreaid) {
         this.uAreaid = uAreaid;
     }
+
+	@Override
+	public String toString() {
+		return "TUser [id=" + id + ", uUsername=" + uUsername + ", uNickname=" + uNickname + ", uPassword=" + uPassword
+				+ ", uSex=" + uSex + ", uBindtel=" + uBindtel + ", uEmail=" + uEmail + ", uHeading=" + uHeading
+				+ ", uState=" + uState + ", uCreatetime=" + uCreatetime + ", uBirthday=" + uBirthday + ", uRemark="
+				+ uRemark + ", uUpdate=" + uUpdate + ", uProvinceid=" + uProvinceid + ", uCityid=" + uCityid
+				+ ", uAreaid=" + uAreaid + "]";
+	}
     
    /* public TUser(String uUsername, String uPassword) {
 //		super();
     	this.uUsername = uUsername;
     	this.uPassword = uPassword;
     }*/
+    
+    
     
 }

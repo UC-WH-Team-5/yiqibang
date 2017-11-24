@@ -97,6 +97,19 @@ public class CommServlet extends BaseServlet {
 		WriteResultToClient.WriteMethod(response, result);		
 	}
 	
+	public void getAllCountByNewid(HttpServletRequest request,HttpServletResponse response){
+		int newsid =Integer.parseInt(request.getParameter("newsid"));
+		Result result=commDao.getAllCountByNewid(newsid);
+		WriteResultToClient.WriteMethod(response, result);	
+	}
+	
+	public void getLastCommByNewid(HttpServletRequest request,HttpServletResponse response){
+		int newsid =Integer.parseInt(request.getParameter("newsid"));
+		Result result=commDao.getLastCommByNewid(newsid);
+		WriteResultToClient.WriteMethod(response, result);	
+	}
+	
+	
 
 
 	

@@ -174,6 +174,37 @@ public class commMapperImpl implements TCommentMapper {
 		return 0;
 	}
 
+	@Override
+	public Result getAllCountByNewid(int newsid) {
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		List<TComment> commlist=session.selectList(Constants.commentMapper_getAllCountByNewid,newsid);
+		int commCount=commlist.size();
+		if(commCount!=0){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetData(commCount);
+			result.setRetMsg(true);
+		}
+		return result;
+	}
+
+	@Override
+	public Result getLastCommByNewid(int newsid) {
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		TComment comm=session.selectOne(Constants.commentMapper_selectLastByNewid,newsid);
+		if(comm!=null){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetData(comm);
+			result.setRetMsg(true);
+		}
+		return result;
+	}
+
 
 
 }

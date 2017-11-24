@@ -7,7 +7,11 @@ import cn.uc.yiqibang.utils.Result;
 
 import java.util.List;
 
+import com.sun.xml.internal.ws.api.pipe.Tube;
+
 public interface TUserMapper {
+	
+	Result loginUser(TUser user);
 	
 	Result selectAllByPage(int pageNum); 
     

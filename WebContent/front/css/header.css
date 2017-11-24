@@ -1,0 +1,59 @@
+@CHARSET "UTF-8";
+
+#head div {
+    padding: 0; 
+}
+.well {
+	width:50px;
+    min-height: 0; 
+    padding:0; 
+    background:#781378;
+    text-align:center;
+    
+}
+.well p{
+	padding:5px;
+	color:white;
+	margin-bottom:0px;
+}
+
+#loginBtn{
+	width:60px;
+	text-align:center
+}
+ #header{
+	height:32px;
+}
+#header .navbar{
+	min-height:32px;
+}
+#header .navbar-nav li,#header .navbar-nav li a{
+	height:32px;
+	line-height:32px;
+	padding-top:0;
+	padding-bottom:0;
+} 
+#header *{
+	color:white
+}
+.nav .open>a{
+	background-color:transparent !important;
+}
+#header .navbar-default{
+	background:#781378;
+	border:none;
+	border-radius:0;
+} 
+#header .container{
+	width:92%;
+}
+.dropdown-menu>li>a{
+	color:gray !important;
+}
+.navbar-default .navbar-nav>.open>a，.navbar-default .navbar-nav>.open>li{
+	background-color:transparent !important;
+	color:white;
+}
+.navbar-default .navbar-nav>.open{
+	color:white;
+}

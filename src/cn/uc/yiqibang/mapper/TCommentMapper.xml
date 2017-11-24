@@ -56,6 +56,16 @@
     -->
     id, t_u_id, t_n_id, c_content, c_createtime, c_thumbscount
   </sql>
+  <select id="selectLastByNewid" parameterType="int" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_comment where id = (select max(id) from t_comment where  from t_comment where t_u_id=#{newsid,jdbcType=INTEGER})
+	</select>
+  <select id="selectAllCountByNewid" parameterType="int" resultType="int">
+	   select 
+	<include refid="Base_Column_List" />
+ from t_comment where t_u_id=#{newsid,jdbcType=INTEGER}
+	</select>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.uc.yiqibang.beans.TCommentExample" >
     <!--
       WARNING - @mbggenerated

@@ -128,4 +128,10 @@ public class TAdmin {
     public void setuLevel(Integer uLevel) {
         this.uLevel = uLevel;
     }
+
+	@Override
+	public String toString() {
+		return "TAdmin [id=" + id + ", tUId=" + tUId + ", uState=" + uState + ", uLevel=" + uLevel + "]";
+	}
+    
 }

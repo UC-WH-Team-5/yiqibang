@@ -1,0 +1,28 @@
+﻿#parent {
+	width: 100%;
+	position: relative;
+	height: 40px;
+	line-height: 40px;
+	border: 1px solid lightgray;
+	overflow: hidden;
+	background:#e8e8e8;
+	text-align: center;
+}
+
+#innerTv {
+	color: lightgray;
+}
+
+#div1 {
+	width: 40px;
+	border-left: 1px solid lightgray;
+	border-right: 1px solid lightgray;
+	height: 40px;
+	background-color:white;
+	background-image:url('../img/lllllll.png');
+	background-repeat:no-repeat;
+	background-position:center;
+	position: absolute;
+	left: -1px;
+	top: 0px;
+}

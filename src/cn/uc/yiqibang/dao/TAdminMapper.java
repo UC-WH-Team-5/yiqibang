@@ -8,6 +8,8 @@ import cn.uc.yiqibang.utils.Result;
 import java.util.List;
 
 public interface TAdminMapper {
+	
+	Result loginAdmin(int userid);
     
 	Result selectAllByPage(int pageNum); 
     

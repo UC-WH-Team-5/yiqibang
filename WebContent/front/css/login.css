@@ -1,0 +1,65 @@
+
+form {
+	padding: 20px;
+	border: 1px solid #ddd;
+	border-top: none;
+	margin-bottom: 20px;
+}
+
+.nav-tabs li {
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+
+.nav-tabs>li.active>a {
+	border-bottom: none;
+}
+
+.checkbox+.checkbox {
+	margin-top: 10px;
+}
+
+.register_btn {
+	margin-left: 5px;
+}
+#login_box {
+	margin-top: 100px;
+}
+
+form {
+	padding: 20px;
+	border: 1px solid #ddd;
+	border-top: none;
+	margin-bottom: 20px;
+}
+
+.nav-tabs li {
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+
+.nav-tabs>li.active>a {
+	border-bottom: none;
+}
+
+.checkbox+.checkbox {
+	margin-top: 10px;
+}
+
+.register_btn {
+	margin-left: 5px;
+}
+
+#loginModal .modal-content{
+	margin-top:80px;
+}
+
+#registerModal .modal-content{
+	padding:0;
+	margin-top:50px;
+}
+#registerModal #register_box{
+	margin-top:0;
+}

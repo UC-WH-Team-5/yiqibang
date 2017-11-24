@@ -1,0 +1,168 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+.all{
+    width: 100%;
+}
+.my-div{
+    background-color: black;
+    height: 32px;
+    padding-right: 20px;
+}
+.my-img{
+    background-color: rgb(41,156,219);
+    margin-left: 20px;
+    height: 81px;
+    width: 160px;
+    padding: 17px 11px 17px 11px;
+}
+
+.my-div ul{
+    float: right;
+}
+
+.my-div ul li{
+    float: left;
+}
+.login-btn{
+    width: 48px;
+    height: 32px;
+    background-color: #289bbd;
+    font-size: 12px;
+    padding: 10px 11px 10px 11px;
+}
+.my-div ul li p{
+    color: white;
+}
+
+.download{
+    font-size: 12px;
+    margin: 9px 20px 10px 20px;
+}
+
+.sug{
+    font-size: 12px;
+    margin: 10px 38px 10px 0px;
+}
+
+.search{
+    height: 44px;
+    width: 552px;
+    margin: 34px 524px 39px 524px;
+    position: absolute;
+}
+
+.la-img{
+    width: 100px;
+    height: 44px;
+    position: absolute;
+    margin-left: 976px;
+    margin-top: 34px;
+    background: #398fe6;
+}
+.img{
+    padding: 10px 38px 10px 38px;
+}
+
+
+.my-list{
+    height: 432px;
+    width: 147px;
+    margin: 0px 15px 0px 200px;
+    text-align: center;
+    position: absolute;
+}
+
+.my-list a{
+    height: 35px;
+}
+
+.my-list a p{
+    font-size: 14px;
+
+}
+.my-row{
+    margin-top: 100px;
+}
+
+ul li{
+    list-style: none;
+}
+.my-carousel{
+    width: 714px;
+    height: 210px;
+    position: absolute;
+    margin-left: 362px;
+}
+
+.my-content-ul li{
+    list-style: none;
+    float: left;
+    padding: 0px;
+}
+.my-carousel ul li h4{
+    margin-left: 8px;
+}
+ul li img{
+    margin: 10px 0px 10px 10px;
+}
+
+.my-title{
+    width: 242px;
+    height: 340px;
+    margin-left: 1096px;
+    margin-bottom: 50px;
+    background: rgb(242,242,242);
+}
+
+.more{
+    width: 242px;
+    height: 140px;
+    margin-top: 10px;
+    margin-left: 1096px;
+    background: #F2F2F2;
+}
+
+.more-content{
+    margin: 15px 8px 25px 8px;
+}
+
+.content{
+    font-size: 12px;
+    color: #333333;
+    font-weight: bold;
+
+}
+.title{
+    padding: 10px 80px 0px 10px;
+}
+.div-style{
+    background-color: gray;
+    margin-bottom: 7px;
+    margin-top: 7px;
+}
+
+.content-right{
+    position: absolute;
+    display: inline-block;
+    vertical-align:middle;
+    margin-left: 10px;
+}
+
+.content-right h4{
+    margin-top: 54px;
+    margin-left: 14px;
+    font-size: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+

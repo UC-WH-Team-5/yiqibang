@@ -14,7 +14,10 @@ public interface TCommentMapper {
      *
      * @mbggenerated Fri Nov 10 16:23:26 CST 2017
      */
-    
+	Result getLastCommByNewid(int newsid);
+	
+    Result getAllCountByNewid(int newsid);
+	
 	 Result selectAllByPage(int pageNum); 
 	    
 	 Result insertSelective(TComment record);

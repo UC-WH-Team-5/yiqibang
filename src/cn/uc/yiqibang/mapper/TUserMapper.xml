@@ -67,6 +67,7 @@
     id, u_username, u_nickname, u_password, u_sex, u_bindtel, u_email, u_heading, u_state, 
     u_createtime, u_birthday, u_remark, u_update, u_provinceid, u_cityid, u_areaid
   </sql>
+
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.uc.yiqibang.beans.TUserExample" >
     <!--
       WARNING - @mbggenerated
@@ -109,6 +110,14 @@
  	from t_user
  	limit #{startIndex},#{pageCounts}
   </select>
+    <select id="selectByNameAndPwd" resultMap="BaseResultMap" parameterType="cn.uc.yiqibang.beans.TUser">
+    select
+		<include refid="Base_Column_List" />
+		from t_user
+		where u_username=#{uUsername,jdbcType=VARCHAR}
+		and
+		u_password=#{uPassword,jdbcType=VARCHAR}
+    </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     <!--
       WARNING - @mbggenerated

@@ -35,6 +35,12 @@ public class Constants {
 	public static final String selectAllByPage=".selectAllByPage";
 	public static final String updateByCondition=".updateByCondition";
 	public static final String selectByCondition=".selectByCondition";
+	public static final String selectByNameAndPwd=".selectByNameAndPwd";
+	public static final String selectByUserId=".selectByUserId";
+	public static final String getAllCountByNewid=".getAllCountByNewid";
+	public static final String selectLastByNewid=".selectLastByNewid";
+	
+	
 	
 	
 	
@@ -50,6 +56,8 @@ public class Constants {
 	public static final String commentMapper_selectByLike=root+commentMapper+selectByLike;
 	public static final String commentMapper_updateByPrimaryKeySelective=root+commentMapper+updateByPrimaryKeySelective;
 	public static final String commentMapper_selectByPrimaryKey=root+commentMapper+selectByPrimaryKey;
+	public static final String commentMapper_getAllCountByNewid=root+commentMapper+getAllCountByNewid;
+	public static final String commentMapper_selectLastByNewid=root+commentMapper+selectLastByNewid;
 
 	
 	
@@ -91,6 +99,7 @@ public class Constants {
 	public static final String userMapper_selectAll=root+userMapper+selectAll;
 	public static final String userMapper_selectByPrimaryKey=root+userMapper+selectByPrimaryKey;
 	public static final String userMapper_deleteByCondition=root+userMapper+deleteByCondition;
+	public static final String userMapper_selectByNameAndPwd=root+userMapper+selectByNameAndPwd;
 	
 	//Admin管理员的操作语句路径
 		public static final int adminPageCounts=5;
@@ -105,5 +114,6 @@ public class Constants {
 		public static final String adminMapper_deleteByCondition=root+adminMapper+deleteByCondition;
 		public static final String adminMapper_selectAllByPage=root+adminMapper+selectAllByPage;
 		public static final String adminMapper_selectByPrimaryKey=root+adminMapper+selectByPrimaryKey;
+		public static final String adminMapper_selectByUserId=root+adminMapper+selectByUserId;
 	
 }

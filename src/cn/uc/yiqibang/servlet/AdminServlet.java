@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import cn.uc.yiqibang.beans.TAdmin;
 import cn.uc.yiqibang.beans.TUser;
@@ -16,8 +17,10 @@ import cn.uc.yiqibang.dao.TAdminMapper;
 import cn.uc.yiqibang.dao.TUserMapper;
 import cn.uc.yiqibang.dao.impl.adminMapperImpl;
 import cn.uc.yiqibang.dao.impl.userMapperImpl;
+import cn.uc.yiqibang.utils.Constants;
 import cn.uc.yiqibang.utils.Result;
 import cn.uc.yiqibang.utils.WriteResultToClient;
+
 
 /**
  * Servlet implementation class AdminServlet
@@ -106,5 +109,38 @@ public class AdminServlet extends BaseServlet {
 		WriteResultToClient.WriteMethod(response, result);
 	}
 	
+	public void loginAdmin(HttpServletRequest request,HttpServletResponse response){
+		String userName = request.getParameter("username");
+		String userPwd = request.getParameter("password");
+		String validateCode = request.getParameter("userValidate");
+		HttpSession session = request.getSession();
+		String code = (String) session.getAttribute("ccode");
+		Result result = new Result();
+		if (validateCode.equals(code)) {
+			TUser user = new TUser();
+			user.setuUsername(userName);
+			user.setuPassword(userPwd);
+			Result result0 = userDao.loginUser(user);
+			System.out.println(result0);
+			if (result0.isRetMsg()) {
+				TUser userLogin= (TUser) result0.getRetData();
+				System.out.println(userLogin);
+				result= adminDao.loginAdmin(userLogin.getId());
+				TAdmin admin=(TAdmin) result.getRetData();
+				System.out.println(result);
+				if (result.isRetMsg()) {
+						//使用session保存管理员登录id,识别状态
+					request.getSession().setAttribute("adminId",admin.getId());
+				}
+			} else {
+				result.setRetMsg(false);
+				result.setRetCode(Constants.RETCODE_FAIL);
+			}
+		} else {
+			result.setRetCode(Constants.RETCODE_FAIL);
+			result.setRetMsg(false);
+		}
+		WriteResultToClient.WriteMethod(response, result);
+	}
 
 }

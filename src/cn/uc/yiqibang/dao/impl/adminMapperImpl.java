@@ -161,4 +161,20 @@ public class adminMapperImpl implements TAdminMapper {
 		return 0;
 	}
 
+	@Override
+	public Result loginAdmin(int userid) {
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		TAdmin admin=session.selectOne(Constants.adminMapper_selectByUserId,userid);
+		if(admin!=null){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetData(admin);
+			result.setRetMsg(true);
+		}
+		return result;
+		
+	}
+
 }

@@ -12,7 +12,7 @@
 
 <script src="../jquery/jquery-3.2.1.min.js"></script>
 <script src="../bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="/login.js"></script>
+<script src="login.js"></script>
 <link href="login.css" rel="stylesheet">
 <script type="text/javascript">
 	var path = "/yiqibang";
@@ -41,7 +41,7 @@
 				userValidate : validateCode
 			}, function(data) {
 				if (data.retCode == 0) {
-					window.location.href = "index.jsp";
+					window.location.href = "admin.jsp";
 				} else if (data.retCode == 1001) {
 					$("#userValidate").val("");
 					$("#tip").text("验证码错误");
@@ -90,7 +90,7 @@
 		}
 	}
 
-	//发送手机验证码
+/* 	//发送手机验证码
 	function sendCodeM() {
 		var tel = $("#mobile_m").val();
 		var reg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
@@ -169,7 +169,7 @@
 			});
 		}
 	}
-
+ */
 	//密码重置
 	function resetPwd() {
 		$("#tip_n").text("");
@@ -226,7 +226,7 @@
 				<label for="userName">验证码：</label>
 				<div class="media">
 					<div class="media-left">
-						<img onclick="refreshCode()" src="validate.jsp" id="123"
+						<img onclick="refreshCode()" src="../validate.jsp" id="123"
 							alt="图片看不清？点击刷新重新得到验证码" style="cursor: hand;">
 					</div>
 					<div class="media-body">

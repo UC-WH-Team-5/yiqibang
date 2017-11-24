@@ -1,0 +1,235 @@
+@CHARSET "UTF-8";
+*{margin:0px;padding:0px;}/*重置标签样式*/
+body {color:#000; font-size:14px; margin:0 auto; font-family:"微软雅黑", "黑体"}/*  主体定义 */
+a { text-decoration:none; outline: none; transition-duration:0.15s;}
+a:hover{ text-decoration:none;color:#963; text-decoration:underline;}
+ul,li { list-style:none;}
+img { border:none;}
+em { font-style:normal;}
+.cl:after{display:block;clear:both;height:0;overflow:hidden;visibility:hidden;content:".";}
+.cl{clear:both;*zoom:1;}
+.border { border:1px solid #ebebeb; border-radius:3px;}
+.bor_t{ border-bottom:3px solid #630;}
+.width{ width:100%}
+#wrap_content{ background:url(images/top_bg.jpg) repeat-x center top;}
+.FL{ float:left}
+.fl { display:inline-block; float:left;}
+.fr { display:inline-block; float:right;}
+.boder_ra5{ border-radius:5px;}
+.Cen{ width:1000px;margin:0 auto}
+.w98{width:98%}
+.ML16{ margin-left:16px}
+.ML34{ margin-left:34px;}
+.MT56{ margin-top:56px;}
+.MT10{ margin-top:10px}
+.MT0{ margin-top:0px;}
+.Mt27{ margin-top:27px}
+.PL34{ padding-left:34px;}
+.bor_b{border-bottom:1px dashed #a0a0a0;}
+.bor_t{border-top:2px solid #4f4f4f;}
+.clear{ clear:both}
+
+#head{
+	height: 32px;
+	line-height: 32px;
+	width: 100%;
+	background:#781378
+}
+#head .nav{
+	position: relative
+}
+#head  .navright{
+	position: absolute;
+	right: 38px	
+}
+#head  .navleft{
+	position: absolute;
+	left: 20px;
+}
+
+#head div {
+	padding: 0 20px;
+}
+#head div ul li{
+	float: left;
+	margin-right: 10px;
+}
+#head div ul li a{ 
+	color: #fff;
+	font-size: 14px;
+	
+}
+#main{
+	width: 714px;
+	margin: 0 auto;
+	
+}
+#main .Crumbs{
+	margin-top: 20px;
+	color: #999;	
+}
+#main .Crumbs span{
+	padding: 0 5px;
+}
+#main .Crumbs .text{
+	color: #2986ce;
+}
+#main .newspic{
+	margin-top: 20px;
+	width: 100%;
+	height: 314px;
+	padding: 22px 0 20px 0;
+}
+#main .newspic .pic{
+	width: 471px;
+	
+}
+#main .newspic .describe{	
+	width: 235px;
+	margin: 0 4px;
+	color: #333;
+	font-size: 12px;
+	
+}
+#main .newspic .describe h4{
+	font-size: 14px;
+	font-weight: normal;
+	margin-bottom: 24px;
+}
+
+#main .newspic .describe #newstext{
+	overflow:hidden; 
+	text-overflow:ellipsis;
+	height: 65px;
+}
+#main .newspic .describe p{
+	
+	
+	
+}
+
+#main .newspic .describe #Keyword{
+	
+}
+#main .newspic .describe #Keyword span{
+	padding-right: 10px;
+	font-size: 10px;
+	color: #818181;
+}
+#main .newspic .describe #date{
+	margin-top: 80px;
+	font-size: 10px;
+	color: #818181;
+}
+#main .newspic .describe #Report{
+	margin-top: 8px;
+}
+#main .newspic .describe #Report a{ 
+	color: #818181;
+}
+#main .newspic .describe #share{
+	border-top: 1px solid #ccc;
+	margin-top: 3px;
+	padding-top: 15px;
+}
+#main .newspic .describe #share li{
+	float: left;
+	margin-right: 10px;
+	line-height: 25px;
+}
+#main .comment{
+	margin-top: 20px;
+}
+#main #commentnum{
+	color: #2986ce;
+}
+
+#main .commentcontent{
+	margin-top: 14px;
+	position: relative;
+}
+
+	
+
+#main .commentcontent #commentinput{
+	width: 495px;
+	height: 28px;
+	line-height: 28px;
+	display: block;
+	position: absolute;
+	left: 25px;
+	color: #7f7f7f;
+	
+}
+#main .commentcontent #commentbutton{
+	background: #2986ce;
+	height: 32px;
+	width: 70px;
+	color: #fff;
+	border: none;
+	display: block;
+	position: absolute;
+	left: 520PX;
+}
+#main .commentcontent .icon{
+	position: absolute;
+	left: 0;
+	top: 5px;
+		
+}
+#main .comment #commentlist{
+	margin-top: 60px;
+}
+#main .comment #commentlist li:first-child{
+	border-top:none;
+}
+
+#main .comment #commentlist li{
+	border-top: 1px solid #999;
+	width: 405px;
+	height: 62px;
+	display: block;
+	position: relative;	
+	margin-top: 50px;
+	padding-top: 12px;
+		
+}
+#main .comment #commentlist li .icon{
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	position: absolute;
+	left: 0;
+	top: -10px;		
+}
+#main .comment #commentlist li .commentlist_content{
+	position: absolute;
+	left: 25px;
+	color: #818181;
+	top: 12px;
+	padding-bottom: 16px;
+	
+}
+#main .comment #commentlist li .commentlist_content .username{
+	color: #2986ce;
+	font-size: 10px;
+	font-weight: bold;
+}
+#main .comment #commentlist li .good{
+	position: absolute;
+	right: 0;
+	top: 45px;
+}
+.morecomment{
+	text-align: center;
+}
+.morecomment a{
+	color: #2986ce;
+	height: 20px;
+	line-height: 20px;
+	text-align: center
+	
+}
+
+
+

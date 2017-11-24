@@ -543,7 +543,7 @@ ul, li {
 				<div class="container-fluid con_header clear">
 					<div class="input-group">
 						<ul class="clear">
-							<li ><a>用户</a></li>
+							<li ><a href="user.jsp">用户</a></li>
 							<li class="uactive"><a>管理员</a></li>
 						</ul>
 						<input type="text" class="form-control" placeholder="内容">

@@ -512,7 +512,7 @@ ul, li {
 					<div class="input-group">
 						<ul class="clear">
 							<li class="uactive"><a>用户</a></li>
-							<li><a>管理员</a></li>
+							<li><a href="admin.jsp">管理员</a></li>
 						</ul>
 						<input type="text" class="form-control" placeholder="内容">
 						<span class="input-group-btn">
