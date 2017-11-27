@@ -54,11 +54,17 @@
     -->
     id, t_u_id, u_state, u_level
   </sql>
+  <select id="selectByCondition" resultMap="BaseResultMap" parameterType="cn.uc.yiqibang.beans.TAdmin">
+  	 select 
+    <include refid="Base_Column_List" />
+
+    from t_admin
+    where t_u_id like #{tUId,jdbcType=INTEGER} 
+  </select>
   <select id="selectByLike" resultMap="BaseResultMap" parameterType="java.lang.String">
   	 select 
     <include refid="Base_Column_List" />
-    ,
-    <include refid="Base_Column_List" />
+
     from t_admin
     where u_level like #{likeStr} 
   </select>

@@ -139,8 +139,18 @@ public class adminMapperImpl implements TAdminMapper {
 
 	@Override
 	public Result selectByCondition(TAdmin record) {
-		// TODO Auto-generated method stub
-		return null;
+		Result result=new Result();
+		result.setRetCode(Constants.RETCODE_FAIL);
+		result.setRetMsg(false);
+		SqlSession session=MyBatisUtils.openSession();
+		TAdmin admin=session.selectOne(Constants.adminMapper_selectByCondition,record);
+		session.close();
+		if(admin!=null){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetMsg(true);
+			result.setRetData(admin);
+		}
+		return result;
 	}
 
 	@Override

@@ -286,8 +286,8 @@ ul, li {
 	color: red;
 }
 
-#table_head>tr>td{
-height:35px;
+#table_head>tr>td {
+	height: 35px;
 }
 </style>
 <script>
@@ -302,7 +302,38 @@ height:35px;
 		$(".uactive").css("background", "#FFA705")
 		$(document).area("s_province", "s_city", "s_county");
 		showPageBox("/yiqibang/UserServlet", "getAllUserCount");
+		
+		$("#uploadBtn").click(
+				function() {
+					var result = checkImg();
+					if (result) {
+						//表单数据
+						var formData = new FormData(document.getElementById("headForm"));
+						$.ajax({
+									url : "/yiqibang/FileUploadServlet?action=addUserPhoto",
+									type : "post",
+									data : formData,
+									processData : false,
+									contentType : false,
+									success : function(data) {
+										console.log(data);
+										//将json字符串转化为js的对象
+										var result = JSON.parse(data);
+										if (result.retMsg) {
+											console.log(result.imgName);
+											  $("#myhead").attr("src","/yiqibang/img/"+result.imgName);
+											  $("#headimg").attr("value","/yiqibang/img/"+result.imgName);
+										} else {
+											alert("上传失败");
+										}
 
+									},
+									error : function(e) {
+										console.log(data);
+									}
+								});
+					}
+				});
 	});
 
 	function getPageAllData(pageNum) {
@@ -344,8 +375,9 @@ height:35px;
 										+ getStrDate(user.uBirthday.time)
 										+ "</td>"
 										+ "<td>"
-										+ user.uProvinceid+user.uCityid+
-										+ "</td>"
+										+ user.uProvinceid
+										+ user.uCityid
+										+ +"</td>"
 										+ "<td>"
 										+ user.uBindtel
 										+ "</td>"
@@ -359,7 +391,7 @@ height:35px;
 										+ getStrDate(user.uUpdate.time)
 										+ "</td>"
 										+ "<td>"
-										+ user.uHeading
+										+ '<img src="" id="myhead" style="width:50px;height:50px;">'
 										+ "</td>"
 										+ "<td>"
 										+ user.uRemark
@@ -371,8 +403,8 @@ height:35px;
 										+ ')"></span>'
 										+ '</div>'
 										+ '</td>'
-										+ '<td class="icon_row" style="width:50px">'										
-										+ '<div class="row">'										
+										+ '<td class="icon_row" style="width:50px">'
+										+ '<div class="row">'
 										+ '<div class="col-md-6 text-center">'
 										+ '<span class="glyphicon glyphicon-cog configBtn" id="configBtn'+i+'" ></span>'
 										+ '</div>'
@@ -386,18 +418,21 @@ height:35px;
 			$(".configBtn").each(function(index) {
 				$("#configBtn" + index).click(function() {
 					var user = userList[index];
-					$('#addAdminModal').modal('show');
-					$("#myModalLabel").text("修改管理员");
-					$('#addAdminModal #userid').val(user.tUId);
-					$('#addAdminModal #level').val(user.uLevel);
-					$('#userid').val(user.id);
-					if (user.uState) {
-						$("#yes").attr("checked", true);
-						$("#no").removeAttr("checked");
+					$('#addUserModal').modal('show');
+					/* $("#myModalLabel").text("修改管理员"); */
+					$("#nickname").val(user.uNickname);
+					$("#username").val(user.uUsername);
+					$("#mobile1").val(user.uBindtel);
+					if (user.uSex) {
+						$("#sex_yes").attr("checked", true);
+						$("#sex_no").removeAttr("checked");
 					} else {
-						$("#no").attr("checked", true);
-						$("#yes").removeAttr("checked");
+						$("#sex_no").attr("checked", true);
+						$("#sex_yes").removeAttr("checked");
 					}
+					$("#myhead").attr("src", user.uHeading);
+					$("#remark").val(user.uRemark);
+					$('#userid').val(user.id);
 
 				})
 			});
@@ -406,7 +441,7 @@ height:35px;
 	}
 
 	function addAdminBtn() {
-		$('#addAdminModal').modal('show');
+		$('#addUserModal').modal('show');
 	}
 
 	function searchAdminByLike() {
@@ -458,6 +493,8 @@ height:35px;
 				if (jsData.retMsg) {
 					alert("删除成功");
 					location.reload();
+				} else if (jsData.retCode == 11) {
+					alert("该账户为管理员账户，没有删除权限");
 				} else {
 					alert("删除失败");
 				}
@@ -472,23 +509,23 @@ height:35px;
 
 		})
 	}
-	
-	function lvlUp(){
-		
+
+	function lvlUp() {
+
 		var userid = $("#userid").val();
-		var level= $("#level").val();
+		var level = $("#level").val();
 		var state = $("#admin_yes").prop("checked") ? true : false;
 		var data = {
-				level : level,
-				state : state,
-				userid: userid
+			level : level,
+			state : state,
+			userid : userid
 		};
-		$.ajax({ 
+		$.ajax({
 			url : "/yiqibang/AdminServlet",
 			data : {
 				action : "InsertAdmin",
-				data:data
-				
+				data : data
+
 			},
 			type : "post",
 			timeout : 5000,
@@ -560,8 +597,8 @@ height:35px;
 							<li class="uactive"><a>用户</a></li>
 							<li><a href="admin.jsp">管理员</a></li>
 						</ul>
-						<input type="text" class="form-control" placeholder="内容" id="searchTv">
-						<span class="input-group-btn">
+						<input type="text" class="form-control" placeholder="内容"
+							id="searchTv"> <span class="input-group-btn">
 							<button class="btn btn-default" type="button"
 								onclick="searchAdminByLike()">
 								<img src="img/public/fangdajing.png">
@@ -575,7 +612,7 @@ height:35px;
 
 				<table class="table table-bordered table-stripted">
 					<thead id="table_head">
-						<tr >
+						<tr>
 							<td>序号</td>
 							<td>用户名</td>
 							<td>昵称</td>
@@ -605,41 +642,34 @@ height:35px;
 	</div>
 	</div>
 
-	<div class="modal fade" id="addAdminModal" tabindex="-1" role="dialog"
+	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 
-					<h4 class="modal-title" id="myModalLabel">添加用户</h4>
+					<h4 class="modal-title" id="myModalLabel">修改用户资料</h4>
 				</div>
-				<div class="modal-body">
+				<div class="modal-body" style="position: relative;">
 					<form class="form-horizontal">
 						<div class="form-group">
-							<label class="col-sm-2 control-label">用户名</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="username"
-									name="username" placeholder="用户名" value=""><input
-									type="hidden" id="userid" value="0">
+							<label for="nickname" class="col-sm-3 control-label">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="nickname"
+									name="nickname" placeholder="请输入昵称">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label">昵称</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="nickrname"
-									name="nickrname" placeholder="昵称" value="">
+							<label for="username" class="col-sm-3 control-label">用&nbsp;&nbsp;户&nbsp;名:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="username1"
+									name="username" placeholder="请输入用户名"> <input
+									type="hidden" name="action">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label">密码</label>
-							<div class="col-sm-8">
-								<input type="password" class="form-control" id="password"
-									name="password" placeholder="密码" value="">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">性别</label>
-							<div class="col-sm-8">
+							<label class="col-sm-3 control-label">性别</label>
+							<div class="col-sm-9">
 								<label class="radio-inline"> <input type="radio"
 									name="state" id="sex_yes" value="true" checked>男
 								</label> <label class="radio-inline"> <input type="radio"
@@ -648,130 +678,97 @@ height:35px;
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label">生日</label>
-							<div class="col-sm-8">
-								<input type="date" class="form-control" id="birthday"
-									name="birthday" placeholder="生日" value="">
+							<label for="bindphone" class="col-sm-3 control-label">手&nbsp;&nbsp;机&nbsp;号:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" id="mobile1"
+									name="bindphone" placeholder="请输入手机号"> <input
+									type="hidden" name="action">
 							</div>
 						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">地址</label>
-							<div class="col-sm-8">
-								<select id="s_province" name="s_province"></select> <select
-									id="s_city" name="s_city"></select> <select id="s_county"
-									name="s_county"></select> <input type="hidden" id="userid"
-									value="0">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">手机号码</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="tel"
-									name="tel" placeholder="电话号码" value="">
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">是否可用</label>
-							<div class="col-sm-8">
-								<label class="radio-inline"> <input type="radio"
-									name="state" id="state_yes" value="true" checked>可用
-								</label> <label class="radio-inline"> <input type="radio"
-									name="state" id="state_no" value="false"> 不可用
-								</label>
 
+						<div class="form-group">
+							<label for="password" class="col-sm-3 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
+							<div class="col-sm-9">
+								<input type="password" class="form-control" id="password1"
+									name="password" placeholder="6-16位英文（区分大小写）、数字或常用字符"> <input
+									type="hidden" id="newsid" value="0">
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label">头像</label>
-							<div class="col-sm-8">
-								<input type="file" class="form-control" id="headimg"
-									name="headimg" placeholder="选择头像" value="">
+							<label for="sure_password" class="col-sm-3 control-label">确认密码:</label>
+							<div class="col-sm-9">
+								<input type="password" class="form-control" id="sure_password1"
+									placeholder="请再次输入密码">
 							</div>
 						</div>
+
+						<div class="form-group" style="height: 130px;">
+							<label class="col-sm-3 control-label">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
+							<input type="hidden" id="headimg" value="0">
+						</div>
 						<div class="form-group">
-							<label class="col-sm-2 control-label">备注</label>
-							<div class="col-sm-8">
+							<label class="col-sm-3 control-label">备注</label>
+							<div class="col-sm-9">
 								<input type="text" class="form-control" id="remark"
-									name="remark" placeholder="电话号码" value="">
+									name="remark" placeholder="备注" value="">
 							</div>
 						</div>
+
+						<div class="form-group">
+							<p id="tip2" class="col-sm-offset-4" style="color: red"></p>
+						</div>
+
 					</form>
+					<div class="col-sm-9 col-sm-offset-3"
+						style="position: absolute; top: 290px; padding: 0; height: 70px; border: none;">
+						<form id="headForm" style="border: none;">
+							<div class="caption">
+								<img src="" id="myhead" style="width: 50px; height: 50px;">
+								<div class="caption">
+
+									<input type="file" name="myfile" id="fileIpt">
+									<button type="button" id="uploadBtn">上传头像</button>
+
+								</div>
+							</div>
+						</form>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
 					<button type="button" class="btn btn-primary"
-						onclick="addAdminSure()">确定</button>
+						onclick="addUserSure()">确定</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="addAdminModal" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
 
-					<h4 class="modal-title" id="myModalLabel">添加管理员</h4>
-				</div>
-				<div class="modal-body">
-					<form class="form-horizontal">
-					 <div class="form-group">
-							<label class="col-sm-2 control-label">用户</label>
-							<div class="col-sm-8">
-								<select id="userid" name="userid" class="form-control"></select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">等级</label>
-							<div class="col-sm-8">
-								<select id="level" name="level" class="form-control">
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-								</select><input
-									type="hidden" id="adminid" value="0">
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label class="col-sm-2 control-label">是否可用</label>
-							<div class="col-sm-8">
-								<label class="radio-inline"> <input type="radio"
-									name="state" id="admin_yes" value="true" checked>可用
-								</label> <label class="radio-inline"> <input type="radio"
-									name="state" id="admin_no" value="false"> 不可用
-								</label>
-
-							</div>
-						</div>
-
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary"
-						onclick="addAdminSure()">确定</button>
-				</div>
-			</div>
-		</div>
+	</div>
+	</div>
 	</div>
 	<jsp:include page="progress.jsp"></jsp:include>
 </body>
 
 <script type="text/javascript">
 	$("#myModal").modal('show');
-	/* function addUserSure() {
-		var userid = $("#userid").val();
-		var level = $("#level").val();
-		var state = $("#yes").prop("checked") ? true : false;
+	function addUserSure() {
+		var nickname = $("#nickname").val();
+		var username = $("#username1").val();
+		var phone = $("#mobile1").val();
+		var sex=	$("#sex_yes").prop("checked") ? true : false;
+		var remark=$("#remark").val();
+		var password=$("#password1").val();
 		var model_title = $("#myModalLabel").text();
 
 		var data = {
-			level : level,
-			state : state,
-			userid : userid
+				sex:sex,
+				level : level,
+				state : state,
+				userid : userid,
+				remark:remark,
+				password:password
 		};
-		if (userid == "" || newsid == "" || thumbcount == "") {
+		if (userid == "" || newsid == "" || thumbcount == "" || userid == "" || newsid == "" || thumbcount == "" || remark=="" ||password=="") {
 			alert("请输入内容");
 			return;
 		}
@@ -800,11 +797,55 @@ height:35px;
 			},
 			complete : function() {
 				$('#myModal').modal('hide');
-				$('#addAdminModal').modal('hide');
+				$('#addUserModal').modal('hide');
 			}
 
-		}) 
+		})
 
-	}*/
+	}
+
+	function addAdminSure() {
+		var userid = $("#userid1").val();
+		var level = $("#level").val();
+		var state = $("#admin_yes").prop("checked") ? true : false;
+
+		var model_title = $("#myModalLabel1").text();
+
+		var data = {
+			level : level,
+			state : state,
+			userid : userid
+		};
+		if (userid == "" || level == "") {
+			alert("请输入内容");
+
+		} else {
+			data.action = "InsertAdmin";
+		}
+
+		$.ajax({
+			url : "/yiqibang/UserServlet",
+			data : data,
+			timeout : 5000,
+			beforesend : function() {
+				$('#myModal').modal('show');
+			},
+			success : function(data) {
+				var jsonData = JSON.parse(data);
+				if (jsonData.retMsg) {
+					alert("设置成功");
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("上传失败");
+			},
+			complete : function() {
+				$('#myModal').modal('hide');
+				$('#addUserModal').modal('hide');
+			}
+
+		})
+	}
 </script>
 </html>

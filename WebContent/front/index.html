@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>新闻浏览</title>
-<link rel="stylesheet"
-	href="../bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../bootstrap/dist/css/bootstrap.min.css">
 <link href="index.css" rel="stylesheet">
 <script src="../jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript"
@@ -18,6 +17,7 @@
 <script type="text/javascript" src="js/register.js"></script>
 <script>
 	$(function() {
+
 		$("#loginUser").click(function() {
 			resetData();
 			$(".nav-tabs>li").removeClass("active");
@@ -27,24 +27,21 @@
 		$("#cateList").html("");
 		$.getJSON("/yiqibang/TypeServlet", {
 			action : "getAllTypes"
-		},
-				function(data) {
-					if (data.retCode == 0) {
-						var catelist = data.retData;
-						for (var i = 0; i < catelist.length; i++) {
-							var cat = catelist[i];
-							$("#cateList").append(
-									'<a class="list-group-item" id="catImte'
-											+ cat.id + '" '
-											+ 'onclick="getNewsByCatId('
-											+ cat.id + ',&apos;'
-											+ cat.tName + '&apos;)"><p>'
-											+ cat.tName + '</p></a>');
-						}
-						getNewsByCatId(catelist[0].id,
-								catelist[0].tName);
-					}
-				});
+		}, function(data) {
+			if (data.retCode == 0) {
+				var catelist = data.retData;
+				for (var i = 0; i < catelist.length; i++) {
+					var cat = catelist[i];
+					$("#cateList").append(
+							'<a class="list-group-item" id="catImte' + cat.id
+									+ '" ' + 'onclick="getNewsByCatId('
+									+ cat.id + ',&apos;' + cat.tName
+									+ '&apos;)"><p>' + cat.tName + '</p></a>');
+				}
+				getNewsByCatId(catelist[0].id, catelist[0].tName);
+			}
+		});
+
 	});
 
 	function getNewsByCatId(id, catName) {
@@ -137,15 +134,16 @@
 												+ '<img id="evaUserId'+i+'" src="img/content_tu_04_24.jpg"> '
 												+ '<span id="evaUser'+i+'"></span> '
 												+ '<span id="evaTime'+i+'"></span>'
+
 												+ '</div>'
 												+ '<div class="col-md-6 text-right">'
 												+ '<span id="evaCount'+i+'"></span>'
 												+ '<span><i class="glyphicon glyphicon-eye-open"></i>&nbsp;'
-												+ newCur.nReadcount + '次</span>'
-												+ '</div>' + '</div>'
-												+ '</div>';
+												+ newCur.nReadcount
+												+ '次</span>' + '</div>'
+												+ '</div>' + '</div>';
 										$("#three_grid").append(itemNew);
-
+										console.log(newCur.id);
 										getLastEvaluateByNewid(newCur.id, i);
 										getAllCountByNewid(newCur.id, i);
 									}
@@ -178,35 +176,43 @@
 
 	//根据新闻id获取最近评论信息
 	function getLastEvaluateByNewid(newsid, index) {
-		$.ajax({
-			url : "/yiqibang/CommServlet",
-			data : {
-				action : "getLastCommByNewid",
-				newsid : newsid
-			},
-			type : "get",
-			timeout : 5000,
-			success : function(data) {
-				var jsData = JSON.parse(data);
-				if (jsData.retCode == 0) {
-					var evaTimeObj = jsData.retData.createtime;
-					var evaUserid = jsData.retData.userid;
-					var time = new Date().getTime() - parseInt(evaTimeObj);
-					var timeStrses = "";
-					if (time < 60 * 60 * 1000) {
-						timeStrses = Math.ceil(time / 1000 / 60) + "分钟前";
-					} else if (time > 60 * 60 * 1000
-							&& time < 24 * 60 * 60 * 1000) {
-						timeStrses = Math.ceil(time / 1000 / 60 / 60) + "小时前";
-					} else {
-						timeStrses = Math.ceil(time / 1000 / 60 / 60 / 24)
-								+ "小时前";
+		$
+				.ajax({
+					url : "/yiqibang/CommServlet",
+					data : {
+						action : "getLastCommByNewid",
+						newsid : newsid
+					},
+					type : "get",
+					timeout : 5000,
+					success : function(data) {
+						var jsData = JSON.parse(data);
+						if (jsData.retCode == 0) {
+							console.log(jsData);
+							var evaTimeObj = jsData.retData.cCreatetime;
+							var evaUserid = jsData.retData.tUId;
+
+							var time = new Date().getTime()
+									- parseInt(evaTimeObj.time);
+							var timeStrses = "";
+							if (time < 60 * 60 * 1000) {
+								timeStrses = Math.ceil(time / 1000 / 60)
+										+ "分钟前";
+							} else if (time > 60 * 60 * 1000
+									&& time < 24 * 60 * 60 * 1000) {
+								timeStrses = Math.ceil(time / 1000 / 60 / 60)
+										+ "小时前";
+							} else {
+								timeStrses = Math.ceil(time / 1000 / 60 / 60
+										/ 24)
+										+ "小时前";
+							}
+							console.log(timeStrses);
+							$("#evaTime" + index).text(timeStrses);
+							getUserInfoById(evaUserid, index);
+						}
 					}
-					$("#evaTime" + index).text(timeStrses);
-					getUserInfoById(evaUserid, index);
-				}
-			}
-		});
+				});
 	}
 
 	function getUserInfoById(userid, index) {
@@ -219,19 +225,21 @@
 			type : "get",
 			timeout : 5000,
 			success : function(data) {
+				console.log(data);
 				var jsData = JSON.parse(data);
 				if (jsData.retCode == 0) {
+					console.log(jsData);
 					$("#evaUser" + index).text(jsData.retData.uNickname);
-					$("#evaUserId" + index).attr(
-							"src",
-							"/yiqibang/new_imgs/"
-									+ jsData.retData.username);
+					/* $("#evaUserId" + index).attr(
+						"src",
+						"/yiqibang/img/"
+								+ jsData.retData.uHeading);  */
 				}
 			}
 		});
 	}
 	function info_new(newsid, catName) {
-		window.open(decodeURI("news.html?newsid=" + newsid + "&catname="
+		window.open(decodeURI("new_center.html?newsid=" + newsid + "&catname="
 				+ catName));
 	}
 </script>
@@ -482,11 +490,11 @@
 										</div>
 										<div class="form-group">
 											<label class="checkbox-inline"> <input
-												type="checkbox" name="remember_pwd" id="remember_pwd" value="option1">
-												记住密码
+												type="checkbox" name="remember_pwd" id="remember_pwd"
+												value="option1"> 记住密码
 											</label> <label class="checkbox-inline"> <input
-												type="checkbox" name="auto_login" id="auto_login" value="option2">
-												自动登录
+												type="checkbox" name="auto_login" id="auto_login"
+												value="option2"> 自动登录
 											</label>
 										</div>
 										<div class="form-group">
@@ -546,7 +554,7 @@
 			<div class="modal-content col-md-10 col-md-offset-1">
 				<div id="register_box">
 					<div class="panel panel-default">
-						<div class="panel-heading">注册用户</div>
+						<div class="panel-heading" id="myModalLabel">注册用户</div>
 						<div class="panel-body">
 							<div class="col-md-12">
 								<ul class="nav nav-tabs" role="tablist">
@@ -560,7 +568,8 @@
 
 								<!-- Tab panes -->
 								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane active" id="phone">
+									<div role="tabpanel" class="tab-pane active" id="phone"
+										style="position:relative;">
 										<form class="form-horizontal my_login_f">
 											<div class="form-group">
 												<label for="nickname" class="col-sm-3 control-label">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</label>
@@ -578,6 +587,16 @@
 												</div>
 											</div>
 											<div class="form-group">
+												<label class="col-sm-3 control-label">性别</label>
+												<div class="col-sm-9">
+													<label class="radio-inline"> <input type="radio"
+														name="state" id="sex_yes" value="true" checked>男
+													</label> <label class="radio-inline"> <input type="radio"
+														name="state" id="sex_no" value="false"> 女
+													</label>
+												</div>
+											</div>
+											<div class="form-group">
 												<label for="bindphone" class="col-sm-3 control-label">手&nbsp;&nbsp;机&nbsp;号:</label>
 												<div class="col-sm-9">
 													<input type="text" class="form-control" id="mobile1"
@@ -585,7 +604,8 @@
 														type="hidden" name="action">
 												</div>
 											</div>
-											<div class="form-group">
+
+											<!-- <div class="form-group">
 												<label for="code" class="col-sm-3 control-label">验&nbsp;&nbsp;证&nbsp;码:</label>
 												<div class="col-sm-8">
 													<div class="input-group">
@@ -596,13 +616,15 @@
 														</span>
 													</div>
 												</div>
-											</div>
+											</div> -->
 
 											<div class="form-group">
 												<label for="password" class="col-sm-3 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
 												<div class="col-sm-9">
 													<input type="password" class="form-control" id="password1"
 														name="password" placeholder="6-16位英文（区分大小写）、数字或常用字符">
+														<input type="hidden"
+														id="newsid" value="0">
 												</div>
 											</div>
 											<div class="form-group">
@@ -610,6 +632,19 @@
 												<div class="col-sm-9">
 													<input type="password" class="form-control"
 														id="sure_password1" placeholder="请再次输入密码">
+												</div>
+											</div>
+
+											<div class="form-group" style="height: 130px;">
+												<label class="col-sm-3 control-label">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像:</label>
+												<input type="hidden"
+														id="headimg" value="0">
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">备注</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" id="remark"
+														name="remark" placeholder="备注" value="">
 												</div>
 											</div>
 
@@ -628,10 +663,25 @@
 														id="registerBtn">注册</button>
 												</div>
 												<div class="col-sm-offset-4 ">
-													<input type="reset" class="btn btn-default btn-sm" value="取消" onclick="$('#registerModal').modal('hide')">
+													<input type="reset" class="btn btn-default btn-sm"
+														value="取消" onclick="$('#registerModal').modal('hide')">
 												</div>
 											</div>
 										</form>
+
+										<div class="col-sm-9 col-sm-offset-3" style="position:absolute;top:290px;padding:0;height:70px;border:none;">
+											<form id="headForm" style="border:none;">
+												<div class="caption">
+													<img src="" id="myhead" style="width:50px;height:50px;">
+													<div class="caption">
+
+														<input type="file" name="myfile" id="fileIpt">
+														<button type="button" id="uploadBtn">上传头像</button>
+
+													</div>
+												</div>
+											</form>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -641,14 +691,110 @@
 			</div>
 		</div>
 	</div>
+	
 </body>
 <script>
+	/* function addUserSure() {
+		var nickname = $("#nickname").val();
+		var username = $("#username1").val();
+		var password=$("#password1").val();
+		var phone = $("#mobile1").val();
+		var sex=	$("#sex_yes").prop("checked") ? true : false;
+		var remark=$("#remark").val();
+		var model_title = $("#myModalLabel").text();
+
+		var data = {
+			sex:sex,
+			level : level,
+			state : state,
+			userid : userid,
+			remark:remark,
+			password:password
+		};
+		if (userid == "" || newsid == "" || thumbcount == "" || remark=="" ||password="") {
+			alert("请输入内容");
+			return;
+		}
+		if (model_title == "修改用户") {
+			data.userid = $("#userid").val();
+			data.action = "userUpdateAdmin";
+		} else {
+			data.action = "userInsertAdmin";
+		}
+
+		$.ajax({
+			url : "/yiqibang/UserServlet",
+			data : data,
+			timeout : 5000,
+			beforesend : function() {
+				$('#myModal').modal('show');
+			},
+			success : function(data) {
+				var jsonData = JSON.parse(data);
+				if (jsonData.retMsg) {
+					location.reload();
+				}
+			},
+			error : function(e) {
+				alert("上传失败");
+			},
+			complete : function() {
+				$('#myModal').modal('hide');
+				$('#addAdminModal').modal('hide');
+			}
+
+		})
+
+	} */
 	var loginUser = getCookieValue("loginuser");//loginuser
 	if (loginUser != null) {
 		getUserByIdIndex(loginUser);
 	} else {
-		$("#loginBtn").html('<a id="loginUser"><p>登陆</p></a>');
+		$("#loginBtn").html('<a id="loginUser"><p>登录</p></a>');
 	}
+	
+ 	$("#uploadBtn").click(
+			function() {
+				var result = checkImg();
+				if (result) {
+					//表单数据
+					var formData = new FormData(document.getElementById("headForm"));
+					$.ajax({
+								url : "/yiqibang/FileUploadServlet?action=addUserPhoto",
+								type : "post",
+								data : formData,
+								processData : false,
+								contentType : false,
+								success : function(data) {
+									console.log(data);
+									//将json字符串转化为js的对象
+									var result = JSON.parse(data);
+									if (result.retMsg) {
+										console.log(result.imgName);
+										  $("#myhead").attr("src","/yiqibang/img/"+result.imgName);
+										  $("#headimg").attr("value","/yiqibang/img/"+result.imgName);
+										  
+									} else {
+										alert("上传失败");
+									}
+
+								},
+								error : function(e) {
+									console.log(data);
+								}
+							});
+				}
+			});
+
+function checkImg() {
+if ($("#fileIpt").val() == "") {//文件选择器没有选择文件
+
+	return false;
+} else {
+	return true;
+}
+
+}
 </script>
 </html>
 

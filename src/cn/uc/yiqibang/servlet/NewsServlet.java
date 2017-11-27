@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -137,7 +138,26 @@ public class NewsServlet extends BaseServlet {
 		Result result=newsDao.selectByPrimaryKey(id);
 		WriteResultToClient.WriteMethod(response, result);
 	}
+	
+	public void updateNewsViewCount(HttpServletRequest request,HttpServletResponse response){
+		int newId = Integer.parseInt(request.getParameter("id"));
+		String viewCount = request.getParameter("viewCount");
+		
+		TNews news = new TNews();
+		news.setId(newId);
+		news.setnReadcount(Integer.parseInt(viewCount));
+		Result result = newsDao.updateNewsViewCount(news);
+		if (result.isRetMsg()) {
+			// 新建cookie 客户浏览器端保存当前用户的id
+			// key-value格式 key-loginuser value-当前用户的id
+			Cookie cookie = new Cookie("isFirst","1");
+			// 设置客户端cookie
+			response.addCookie(cookie);
+		}
+		WriteResultToClient.WriteMethod(response, result);
+	}
 
+	
 
 
 }

@@ -4,19 +4,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.ws.Response;
+
 import org.apache.ibatis.session.SqlSession;
 
 import cn.uc.yiqibang.beans.TAdmin;
 import cn.uc.yiqibang.beans.TUser;
 import cn.uc.yiqibang.beans.TUserExample;
+import cn.uc.yiqibang.dao.TAdminMapper;
 import cn.uc.yiqibang.dao.TUserMapper;
 import cn.uc.yiqibang.utils.Constants;
 import cn.uc.yiqibang.utils.MyBatisUtils;
 import cn.uc.yiqibang.utils.Result;
+import cn.uc.yiqibang.utils.WriteResultToClient;
 
 
 public class userMapperImpl implements TUserMapper {
-
+	
+	TAdminMapper adminDao=new adminMapperImpl();
+	
 	@Override
 	public Result selectAllByPage(int pageNum) {
 		Result result=new Result();
@@ -38,6 +44,8 @@ public class userMapperImpl implements TUserMapper {
 
 	@Override
 	public Result insertSelective(TUser record) {
+		
+		
 		Result result=new Result();
 		result.setRetCode(Constants.RETCODE_FAIL);
 		result.setRetMsg(false);
@@ -55,19 +63,29 @@ public class userMapperImpl implements TUserMapper {
 
 	@Override
 	public Result deleteByPrimaryKey(Integer id) {
+		TAdmin admin=new TAdmin();
+		admin.settUId(id);
+		Result result0=adminDao.selectByCondition(admin);
 		Result result=new Result();
 		result.setRetCode(Constants.RETCODE_FAIL);
 		result.setRetMsg(false);
-		SqlSession session=MyBatisUtils.openSession();
-		int row=session.delete(Constants.userMapper_deleteByPrimaryKey,id);
-		session.commit();
-		session.close();
-		if(row>0){
-			result.setRetCode(Constants.RETCODE_SUCCESS);
-			result.setRetMsg(true);
+		if(result0.getRetData()!=null){
+			result.setRetCode(11);
+		}else {
+			
+			SqlSession session=MyBatisUtils.openSession();
+			int row=session.delete(Constants.userMapper_deleteByPrimaryKey,id);
+			session.commit();
+			session.close();
+			if(row>0){
+				result.setRetCode(Constants.RETCODE_SUCCESS);
+				result.setRetMsg(true);
+			}
+			
 		}
 		
 		return result;
+		
 	}
 
 	@Override

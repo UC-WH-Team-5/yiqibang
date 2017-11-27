@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
 encoding//WebContent/backend/admin.jsp=UTF-8
+encoding//src/cn/uc/yiqibang/dao/IVerificationCodeBiz.java=UTF-8
 encoding//src/cn/uc/yiqibang/utils/CookieUtils.java=UTF-8
+encoding//src/cn/uc/yiqibang/utils/Utils.java=UTF-8
 encoding/<project>=GBK

@@ -60,14 +60,12 @@ public class CommServlet extends BaseServlet {
 		int newsid=Integer.parseInt(request.getParameter("newsid"));
 		String content=request.getParameter("content");
 		String editorValue=request.getParameter("editorValue");
-		int thumbcount=Integer.parseInt(request.getParameter("thumbcount"));
 		
 		TComment comm=new TComment();
 		comm.setId(commid);
 		comm.setcContent(editorValue);
 		comm.setcContent(content);
 		comm.setcCreatetime(new Date());
-		comm.setcThumbscount(thumbcount);
 		comm.settNId(newsid);
 		comm.settUId(userid);
 		
@@ -83,13 +81,12 @@ public class CommServlet extends BaseServlet {
 		int newsid=Integer.parseInt(request.getParameter("newsid"));
 		String content=request.getParameter("content");
 		String editorValue=request.getParameter("editorValue");
-		int thumbcount=Integer.parseInt(request.getParameter("thumbcount"));
 		
 		TComment comm=new TComment();
 		comm.setcContent(editorValue);
 		comm.setcContent(content);
 		comm.setcCreatetime(new Date());
-		comm.setcThumbscount(thumbcount);
+		comm.setcThumbscount(0);
 		comm.settNId(newsid);
 		comm.settUId(userid);
 		System.out.println(comm);

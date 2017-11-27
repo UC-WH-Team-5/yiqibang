@@ -37,15 +37,20 @@
 				userValidate : validateCode
 			}, function(data) {
 				if (data.retCode == 0) {
+					refreshCode();
 					window.location.href = "admin.jsp";
 				} else if (data.retCode == 1001) {
+					refreshCode();
 					$("#userValidate").val("");
 					$("#tip").text("验证码错误");
 				} else if (data.retCode == 1002) {
+					refreshCode();
 					$("#tip").text("用户名或者密码错误");
 				} else if (data.retCode == 1003) {
+					refreshCode();
 					$("#tip").text("该用户不是管理员，请联系其他管理员");
 				} else {
+					refreshCode();
 					$("#tip").text("登录失败");
 				}
 				refreshCode();
@@ -86,7 +91,7 @@
 		}
 	}
 
-/* 	//发送手机验证码
+ 	//发送手机验证码
 	function sendCodeM() {
 		var tel = $("#mobile_m").val();
 		var reg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
@@ -98,7 +103,7 @@
 		} else {
 			$("#sendCode_m").attr("disabled", true);
 			$("#sendCode_m").val("发送中...");
-			$.getJSON("/YiQiBang/VerificationcodeServlet", {
+			$.getJSON("/yiqibang/VerificationcodeServlet", {
 				action : "sendVerificationCode",
 				mobile : tel
 			}, function(data) {
@@ -138,7 +143,7 @@
 			$("#tip_m").text("验证码不能为空");
 		} else {
 			$.ajax({
-				url : "/YiQiBang/VerificationcodeServlet",
+				url : "/yiqibang/VerificationcodeServlet",
 				data : {
 					action : "searchVerificationcode",
 					mobile : mobilem
@@ -165,7 +170,7 @@
 			});
 		}
 	}
- */
+
 	//密码重置
 	function resetPwd() {
 		$("#tip_n").text("");
@@ -222,7 +227,7 @@
 				<label for="userName">验证码：</label>
 				<div class="media">
 					<div class="media-left">
-						<img onclick="refreshCode()" src="../validate.jsp" id="123"
+						<img onclick="refreshCode()" src="validate.jsp" id="123"
 							alt="图片看不清？点击刷新重新得到验证码" style="cursor: hand;">
 					</div>
 					<div class="media-body">
@@ -377,6 +382,7 @@
 <script>
 	function refreshCode() {
 		$("#123").attr("src", "validate.jsp?abc=" + Math.random());
+
 	}
 </script>
 </html>

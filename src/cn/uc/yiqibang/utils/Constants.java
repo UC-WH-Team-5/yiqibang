@@ -40,6 +40,7 @@ public class Constants {
 	public static final String getAllCountByNewid=".selectAllCountByNewid";
 	public static final String selectLastByNewid=".selectLastByNewid";
 	public static final String selectByUsername=".selectByUsername";
+	public static final String updateNewsViewCount=".updateNewsViewCount";
 	
 	
 	
@@ -75,6 +76,7 @@ public class Constants {
 	public static final String newsMapper_deleteByCondition=root+newsMapper+deleteByCondition;
 	public static final String newsMapper_selectAllByPage=root+newsMapper+selectAllByPage;
 	public static final String newsMapper_selectByPrimaryKey=root+newsMapper+selectByPrimaryKey;
+	public static final String newsMapper_updateNewsViewCount=root+newsMapper+updateNewsViewCount;
 
 	
 	//Type新闻分类的操作路径
@@ -110,7 +112,7 @@ public class Constants {
 		public static final String adminMapper_insert=root+adminMapper+insert;
 		public static final String adminMapper_insertSelective=root+adminMapper+insertSelective;
 		public static final String adminMapper_updateByPrimaryKeySelective=root+adminMapper+updateByPrimaryKeySelective;
-		public static final String adminMapper_updateByCondition=root+adminMapper+updateByCondition;
+		public static final String adminMapper_selectByCondition=root+adminMapper+selectByCondition;
 		public static final String adminMapper_selectByLike=root+adminMapper+selectByLike;
 		public static final String adminMapper_deleteByPrimaryKey=root+adminMapper+deleteByPrimaryKey;
 		public static final String adminMapper_selectByTypeId=root+adminMapper+selectByTypeId;

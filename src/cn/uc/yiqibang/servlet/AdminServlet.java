@@ -63,7 +63,12 @@ public class AdminServlet extends BaseServlet {
 	}
 	
 	public void deleteAdminById(HttpServletRequest request,HttpServletResponse response){
-		int adminid=Integer.parseInt(request.getParameter("adminid"));					
+		int adminid=Integer.parseInt(request.getParameter("adminid"));
+		Result result0=adminDao.selectByPrimaryKey(adminid);
+		TAdmin admin=(TAdmin) result0.getRetData();
+		Result rs=userDao.selectByPrimaryKey(admin.gettUId());
+		TUser user=(TUser) rs.getRetData();
+		Result rs1=userDao.deleteByPrimaryKey(user.getId());		
 		Result result=adminDao.deleteByPrimaryKey(adminid);
 		WriteResultToClient.WriteMethod(response, result);	
 	}
@@ -145,5 +150,6 @@ public class AdminServlet extends BaseServlet {
 		}
 		WriteResultToClient.WriteMethod(response, result);
 	}
+	
 
 }

@@ -254,6 +254,24 @@ public class newsMapperImpl implements TNewsMapper {
 		return result;
 	}
 
+	@Override
+	public Result updateNewsViewCount(TNews record) {
+		Result result=new Result();
+		SqlSession session=MyBatisUtils.openSession();
+		int row=session.update(Constants.newsMapper_updateNewsViewCount,record);
+		session.commit();
+		session.close();
+		if(row>0){
+			result.setRetCode(Constants.RETCODE_SUCCESS);
+			result.setRetData(record);
+			result.setRetMsg(true);
+		}else{
+			result.setRetCode(Constants.RETCODE_FAIL);
+			result.setRetMsg(false);
+		}
+		return result;
+	}
+
 	
 
 

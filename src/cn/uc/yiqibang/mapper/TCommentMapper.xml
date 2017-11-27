@@ -59,7 +59,7 @@
   <select id="selectLastByNewid" parameterType="int" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from t_comment where id = (select max(id) from t_comment where t_u_id=#{newsid,jdbcType=INTEGER})
+		from t_comment where id = (select max(id) from t_comment where t_n_id=#{newsid,jdbcType=INTEGER})
 	</select>
   <select id="selectAllCountByNewid" parameterType="int" resultType="int">
 	   select 

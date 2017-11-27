@@ -28,8 +28,7 @@ function loginOut() {
 
 function getUserByIdIndex(userId) {
 	if (userId != null) {
-		$
-				.getJSON(
+		$.getJSON(
 						"/yiqibang/UserServlet",
 						{
 							action : "getUserById",
@@ -52,6 +51,59 @@ function getUserByIdIndex(userId) {
 						});
 	}
 }
+
+/* function updateUserSure() {
+var nickname = $("#nickname").val();
+var username = $("#username1").val();
+var password=$("#password1").val();
+var phone = $("#mobile1").val();
+var sex=	$("#sex_yes").prop("checked") ? true : false;
+var remark=$("#remark").val();
+var model_title = $("#myModalLabel").text();
+
+var data = {
+	sex:sex,
+	level : level,
+	state : state,
+	userid : userid,
+	remark:remark,
+	password:password
+};
+if (userid == "" || newsid == "" || thumbcount == "" || remark=="" ||password="") {
+	alert("请输入内容");
+	return;
+}
+if (model_title == "修改用户") {
+	data.userid = $("#userid").val();
+	data.action = "userUpdateAdmin";
+} else {
+	data.action = "userInsertAdmin";
+}
+
+$.ajax({
+	url : "/yiqibang/UserServlet",
+	data : data,
+	timeout : 5000,
+	beforesend : function() {
+		$('#myModal').modal('show');
+	},
+	success : function(data) {
+		var jsonData = JSON.parse(data);
+		if (jsonData.retMsg) {
+			location.reload();
+		}
+	},
+	error : function(e) {
+		alert("上传失败");
+	},
+	complete : function() {
+		$('#myModal').modal('hide');
+		$('#addAdminModal').modal('hide');
+	}
+
+})
+
+} */
 
 $(function() {
 	//设置记住密码框是否选中
@@ -131,7 +183,6 @@ $(function() {
 	});
 
 	$("#loginUserSure").click(function() {	
-						
 						var userName = $("#username").val();
 						var password = $("#password").val();
 						if (userName == "" || password == "") {
@@ -163,12 +214,13 @@ $(function() {
 																			+ data.retData.uNickname
 																			+ '<span class="caret"></span></a>'
 																			+ '<ul class="dropdown-menu">'
-																			+ '<li class="text-center"><a style="color:gray">修改资料</a></li>'
+																			+ '<li class="text-center"><a style="color:gray" onclick="updateUserSure()">修改资料</a></li>'
 																			+ '<li class="text-center"><a onclick="loginOut()">注销</a></li>'
 																			+ '</ul>');
 												} else {
 													$("#tip").text("用户名或密码错误");
 												}
+												
 											});
 						}
 					});

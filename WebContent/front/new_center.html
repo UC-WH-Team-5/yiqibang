@@ -1,0 +1,520 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>新闻列表</title>
+<link rel="stylesheet"
+	href="../bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/new_center.css">
+<script src="../jquery/jquery-3.2.1.min.js"></script>
+<script src="../js/date_util.js"></script>
+<script type="text/javascript"
+	src="../bootstrap/dist/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="css/header.css">
+
+<!-- 验证码 -->
+<link rel="stylesheet" href="drag_check/css/slide.css">
+<script src="drag_check/js/slide.js"></script>
+<!-- 登录 -->
+<link rel="stylesheet" href="css/login.css">
+<script type="text/javascript" src="js/cookie.js"></script>
+<script src="js/login.js"></script>
+<script type="text/javascript" src="js/register.js"></script>
+<script>
+    var ifScanAdd=false;
+	function getQueryString(name) {
+		var str = window.location.search;
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = str.substr(1).match(reg);
+		if (r != null) {
+			return decodeURI(r[2]);
+		}
+		return null;
+	}
+	$(function() {
+		ifScanAdd=getCookieValue("isFirst")=="1"?true:false; 
+		var loginUser = getCookieValue("loginuser");
+		if (loginUser != null) {
+			getUserByIdIndex(loginUser);
+		} else {
+			$("#loginBtn").html('<a id="loginUser">登录</a>');
+		}
+		$("#loginUser").click(function() {
+			resetData();
+			$(".nav-tabs>li").removeClass("active");
+			$(".nav-tabs>li").first().addClass("active");
+			$("#loginModal").modal('show');
+		});
+
+		var newsId = getQueryString("newsid")
+		var catName = getQueryString("catname");
+		$("#catName").text(catName);
+
+		$("#cat_top").html("");
+		$
+				.getJSON(
+						"/yiqibang/TypeServlet",
+						{
+							action : "getAllTypes"
+						},
+						function(data) {
+							if (data.retCode == 0) {
+								var catelist = data.retData;
+								var moreList = "";
+								for (var i = 0; i < catelist.length; i++) {
+									var cat = catelist[i];
+									if (i < 5) {
+										$("#cat_top").append(
+												'<li><a href="#">'
+														+ cat.tName
+														+ '</a></li>');
+									} else {
+										moreList += '<li><a href="#">'
+												+ cat.tName
+												+ '</a></li>';
+									}
+
+								}
+								$("#cat_top")
+										.append(
+												'<li class="dropdown"><a href="#" class="dropdown-toggle"'
+								+'data-toggle="dropdown" role="button" aria-haspopup="true"'
+								+'aria-expanded="false">更多<span class="caret"></span></a>'
+														+ '<ul class="dropdown-menu">'
+														+ moreList
+														+ '</ul></li>');
+							}
+						});
+
+		$.getJSON("/yiqibang/NewsServlet", {
+			action : "adminGetNewsById",
+			id : newsId
+		}, function(data) {
+			if (data.retCode == 0) {
+				var newInfo = data.retData;
+				$("#new_title").text(newInfo.nTitle);
+				$("#new_source").text("来源:" + newInfo.nSource);
+				$("#new_scan").text("已读:" + newInfo.nReadcount);
+				$("#new_comment").text("评论:" + newInfo.nCommcount);
+				$("#new_date").text(getStrDate(newInfo.nCreatetime.time));
+				$("#new_content").html(newInfo.nContent);
+				markViewCount(newsId,newInfo.nReadcount+1);
+			}
+		});
+
+		function markViewCount(newsid,viewcount){
+			if(ifScanAdd){
+				$.ajax({
+					url:"/yiqibang/NewsServlet",
+					data:{
+						action:"updateNewsViewCount",
+						id:newsid,
+						viewCount:viewcount
+					},
+					type:"post",
+					timeout:5000,
+					success:function(data){
+						var jsData=JSON.parse(data);
+						if(jsData.retCode==0){
+							$("#new_scan").text("已读:" + viewcount);
+						}
+					},
+					error:function(e){
+					}
+					
+				});
+			}
+		}
+		getEvaluateListByNewsId(newsId);
+
+		$("#evaluate_btn").click(
+						function() {
+							var lginUserId = getCookieValue("loginuser");
+							if (lginUserId == null) {
+								resetData();
+								$(".nav-tabs>li").removeClass("active");
+								$(".nav-tabs>li").first().addClass("active");
+								$("#loginModal").modal('show');
+							} else {
+								var content = $("#evaluate_content").val();
+								if (content != "") {
+									$.getJSON(
+													"/YiQiBang/CommServlet",
+													{
+														action : "adminInsertComm",
+														newsid : newsId,
+														userid : lginUserId,
+														state : 1,
+														score : 5,
+														type : 1,
+														content : content
+													},
+													function(data) {
+														if (data.retCode == 0) {
+															$("#evaluate_content").val("");
+															getEvaluateListByNewsId(newsId);
+															$("#new_comment")
+																	.text(
+																			"评论:"
+																					+ (parseInt($(
+																							"#new_comment")
+																							.text()).length + 1));
+														}
+													});
+								} else {
+									alert("请输入评论内容");
+								}
+							}
+
+						});
+	});
+
+	/* function getEvaluateListByNewsId(newsId) {
+		$("#comment_list").html("");
+		$
+				.getJSON(
+						"/yiqibang/TypeServlet",
+						{
+							action : "getTypeByNewid",
+							newsid : newsId
+						},
+						function(data) {
+							if (data.retCode == 0) {
+								var evaluateList = data.retData;
+								if (evaluateList.length == 0) {
+									$("#comment_list")
+											.append(
+													'<div class="col-md-offset-1 comm_item">无评论，快点占座吧!</div>');
+								} else {
+									for (var i = evaluateList.length - 1; i >= 0; i--) {
+										var evaItem = evaluateList[i];
+										$("#new_comment").text(
+												"评论:" + evaluateList.length);
+										var evaItemStr = '<div class="col-md-10 comm_item">'
+												+ '<div class="media">'
+												+ '<div class="media-left">'
+												+ '<a href="#"> <img id="user_head'+i+'" class="media-object" src="img/pinglun.png" >'
+												+ '</a>'
+												+ '</div>'
+												+ '<div class="media-body">'
+												+ '<p>'
+												+ '<span class="comm_user" id="comm_user'+i+'">mylove</span>'
+												+ '<span class="pre_date">'
+												+ getStrDate(evaItem.createtime)
+												+ '</span>'
+												+ '</p>'
+												+ '<p>'
+												+ evaItem.content
+												+ '</p>'
+												+ '</div>'
+												+ '</div>'
+												+ '</div>';
+										$("#comment_list").append(evaItemStr);
+										getUserById(evaItem.userid, i);
+									}
+
+								}
+							}
+						});
+	} */
+
+	/*根据用户id获取详情
+	 */
+	function getUserById(userId, index) {
+		if (userId != null) {
+			$.getJSON("/yiqibang/UserServlet", {
+				action : "getUserById",
+				userid : userId
+			}, function(data) {
+				if (data.retCode == 0) {
+					$("#comm_user" + index).text(data.retData.uNickname);
+					$("#user_head" + index).css("max-width", "35px");
+					/* $("#user_head" + index).attr(
+							"src",
+							"/yiqibang/AvatarServlet?action=downloadAvatar&username="
+									+ data.retData.uUsername); */
+				} else {
+					$("#comm_user" + index).text("未知用户");
+				}
+			});
+		}
+	}
+</script>
+
+</head>
+
+<body>
+	<div id="wrap_content">
+		<div id="header">
+			<nav class="navbar navbar-default">
+				<div class="container">
+
+
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse"
+						id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav" id="cat_top">
+						</ul>
+
+						<ul class="nav navbar-nav navbar-right">
+							<li id="loginBtn"></li>
+							<li><a href="#">下载App</a></li>
+							<li><a href="#">反馈</a></li>
+						</ul>
+					</div>
+					<!-- /.navbar-collapse -->
+				</div>
+				<!-- /.container -->
+			</nav>
+		</div>
+		<div class="container" id="main">
+			<ol class="breadcrumb">
+				<li><a href="index.html">首页</a></li>
+				<li><a href="#" id="catName">Library</a></li>
+				<li class="active">正文</li>
+			</ol>
+			<table class="table" id="news_info_tb">
+				<tr>
+					<td><h3 id="new_title"></h3></td>
+				</tr>
+				<tr>
+					<td><span id="new_source">来源：新华网</span></td>
+
+				</tr>
+				<tr>
+					<td><span id="new_scan">已读:308</span></td>
+				</tr>
+				<tr>
+					<td><a id="new_comment">评论:208</a></td>
+				</tr>
+				<tr>
+					<td><span id="new_date"></span></td>
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<span>分享到:</span> <img src="img/qq.png"> <img
+								src="img/xinlang.png">
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><a href="#">举报</a></td>
+				</tr>
+			</table>
+			<div class="row" id="new_content"></div>
+			<div class="row" id="comment_box">
+				<div class="col-md-1 icon">
+					<img src="img/pinglun.png">
+				</div>
+				<div class="input-group col-md-6">
+					<input type="text" class="form-control" placeholder="评论内容"
+						aria-describedby="basic-addon2" id="evaluate_content"> <span
+						class="input-group-addon" id="evaluate_btn">评论</span>
+				</div>
+			</div>
+			<div class="row" id="comment_list"></div>
+		</div>
+	</div>
+	<!-- 登录框 -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="loginModal"
+		data-backdrop="false" style="background: rgba(0, 0, 0, 0.5)">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content col-md-8 col-md-offset-2">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">用户登录</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-12">
+							<ul class="nav nav-tabs" role="tablist">
+								<li role="presentation" class="col-md-6 active"><a
+									href="#account" aria-controls="account" role="tab"
+									data-toggle="tab">账号登录</a></li>
+								<li role="presentation" class="col-md-6"><a href="#phone"
+									aria-controls="phone" role="tab" data-toggle="tab">手机登录</a></li>
+							</ul>
+
+							<!-- Tab panes -->
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane active" id="account">
+									<form id="nameForm">
+										<div class="form-group">
+											<input type="text" class="form-control" id="username"
+												placeholder="用户名">
+										</div>
+										<div class="form-group">
+											<input type="password" class="form-control" id="password"
+												placeholder="用户密码">
+										</div>
+										<div class="form-group">
+											<label class="checkbox-inline"> <input
+												type="checkbox" id="remember_pwd" value="option1">
+												记住密码
+											</label> <label class="checkbox-inline"> <input
+												type="checkbox" id="auto_login" value="option2">
+												自动登录
+											</label>
+										</div>
+										<div class="form-group">
+											<div id="parent">
+												<span id="innerTv">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+													&nbsp;按住滑块右移</span>
+												<div id="div1"></div>
+											</div>
+										</div>
+										<div class="form-group">
+											<p id="tip" style="color: red"></p>
+										</div>
+										<div class="form-group">
+											<a type="button" class="btn btn-sm btn-default register_btn"
+												id="registerUser">注册</a>
+											<button type="button"
+												class="btn btn-sm btn-primary register_btn"
+												id="loginUserSure">登录</button>
+										</div>
+									</form>
+
+								</div>
+								<div role="tabpanel" class="tab-pane" id="phone">
+									<form>
+										<div class="form-group">
+											<input type="number" class="form-control" id="mobile"
+												placeholder="手机号">
+										</div>
+										<div class="form-group">
+											<input type="text" class="form-control" id="code"
+												placeholder="验证码">
+										</div>
+										<div class="form-group">
+											<p id="tip1" style="color: red"></p>
+										</div>
+										<button id="login_phone" type="button" class="btn btn-default">登录</button>
+										<input id="sendCode" type="button" class="btn btn-default"
+											value="免费获取验证码" />
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer"></div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!-- 注册框 -->
+	<div class="modal fade" tabindex="-1" role="dialog" id="registerModal"
+		data-backdrop="false" style="background: rgba(0, 0, 0, 0.5)">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content col-md-10 col-md-offset-1">
+				<div id="register_box">
+					<div class="panel panel-default">
+						<div class="panel-heading">注册用户</div>
+						<div class="panel-body">
+							<div class="col-md-12">
+								<ul class="nav nav-tabs" role="tablist">
+									<li role="presentation" class="col-md-6 active"><a
+										href="#phone" aria-controls="phone" role="tab"
+										data-toggle="tab">手机注册</a></li>
+									<li role="presentation" class="col-md-6 disabled" ><a href="#email"
+										aria-controls="email" role="tab" data-toggle="tab">邮箱注册</a></li>
+								</ul>
+
+								<!-- Tab panes -->
+								<div class="tab-content">
+									<div role="tabpanel" class="tab-pane active" id="phone">
+										<form class="form-horizontal my_login_f">
+											<div class="form-group">
+												<label for="nickname" class="col-sm-3 control-label">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称:</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" id="nickname"
+														name="nickname" placeholder="请输入昵称">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="username" class="col-sm-3 control-label">用&nbsp;&nbsp;户&nbsp;名:</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" id="username1"
+														name="username" placeholder="请输入用户名"> <input
+														type="hidden" name="action">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="bindphone" class="col-sm-3 control-label">手&nbsp;&nbsp;机&nbsp;号:</label>
+												<div class="col-sm-9">
+													<input type="text" class="form-control" id="mobile1"
+														name="bindphone" placeholder="请输入手机号"> <input
+														type="hidden" name="action">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="code" class="col-sm-3 control-label">验&nbsp;&nbsp;证&nbsp;码:</label>
+												<div class="col-sm-8">
+													<div class="input-group">
+														<input type="text" class="form-control" id="code1"
+															placeholder="验证码"> <span class="input-group-btn">
+															<input class="btn btn-default" type="button"
+																id="sendCode1" value-"发送">
+														</span>
+													</div>
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label for="password" class="col-sm-3 control-label">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
+												<div class="col-sm-9">
+													<input type="password" class="form-control" id="password1"
+														name="password" placeholder="6-16位英文（区分大小写）、数字或常用字符">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="sure_password" class="col-sm-3 control-label">确认密码:</label>
+												<div class="col-sm-9">
+													<input type="password" class="form-control"
+														id="sure_password1" placeholder="请再次输入密码">
+												</div>
+											</div>
+
+											<div class="form-group">
+												<label class="checkbox col-sm-offset-4"> <input
+													type="checkbox" id="inlineCheckbox1" value="option1">
+													已读并同意<a href="#">《宜企帮使用协议》</a>
+												</label>
+											</div>
+											<div class="form-group">
+												<p id="tip2" class="col-sm-offset-4" style="color: red"></p>
+											</div>
+											<div class="form-group">
+												<div class="col-sm-offset-4 col-sm-3">
+													<button type="button" class="btn btn-primary btn-sm "
+														id="registerBtn">注册</button>
+												</div>
+												<div class="col-sm-offset-4 ">
+													<input type="reset" class="btn btn-default btn-sm" onclick="$('#registerModal').modal('hide')"  value="取消">
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</body>
+</html>

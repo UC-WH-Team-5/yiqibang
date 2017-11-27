@@ -19,10 +19,6 @@ import cn.uc.yiqibang.utils.Constants;
 import cn.uc.yiqibang.utils.CookieUtils;
 import cn.uc.yiqibang.utils.Result;
 import cn.uc.yiqibang.utils.WriteResultToClient;
-
-
-
-
 /**
  * Servlet implementation class UserServlet
  */
@@ -67,7 +63,7 @@ public class UserServlet extends BaseServlet {
 			response.addCookie(cookie);
 		}
 		
-		WriteResultToClient.WriteMethod(response, request);
+		WriteResultToClient.WriteMethod(response, result);
 	}
 	
 	public void logoutUser(HttpServletRequest request, HttpServletResponse response){
@@ -91,32 +87,25 @@ public class UserServlet extends BaseServlet {
 			WriteResultToClient.WriteMethod(response, result);
 		}else {
 			String bindphone = request.getParameter("bindphone");
-			/*String code=request.getParameter("code");*/
-
 			    	TUser user = new TUser();
 					user.setuUsername(username);
-					user.setuBindtel(bindphone);
-					
-					
-					
+					user.setuBindtel(bindphone);															
 					String nickname = request.getParameter("nickname");
-					user.setuNickname(nickname);
-					
-					
+					user.setuNickname(nickname);										
 					String password = request.getParameter("password");
 					user.setuPassword(password);
-
-					user.setuState(true);
-				
-					user.setuCreatetime(new Date());
-				
-					result = userDao.insertSelective(user);
-					
+					String headimg=request.getParameter("headimg");
+					user.setuHeading(headimg);
+					boolean sex=Boolean.parseBoolean(request.getParameter("sex"));
+					user.setuSex(sex);
+					String remark=request.getParameter("remark");
+					user.setuState(true);				
+					user.setuCreatetime(new Date());	
+					user.setuUpdate(new Date());
+					user.setuBirthday(new Date());
+					result = userDao.insertSelective(user);					
 					WriteResultToClient.WriteMethod(response, result);
-			    }
-
-
-	
+			    }	
 	}
 	
 	public void getPageAllData(HttpServletRequest request,HttpServletResponse response){
@@ -130,8 +119,10 @@ public class UserServlet extends BaseServlet {
 		WriteResultToClient.WriteMethod(response, result);	
 	}
 	public void deleteUserById(HttpServletRequest request,HttpServletResponse response){
-		int userid=Integer.parseInt(request.getParameter("userid"));					
+		int userid=Integer.parseInt(request.getParameter("userid"));
+		
 		Result result=userDao.deleteByPrimaryKey(userid);
+		
 		WriteResultToClient.WriteMethod(response, result);	
 	}
 	public void getAllUserCount(HttpServletRequest request,HttpServletResponse response){
@@ -142,6 +133,16 @@ public class UserServlet extends BaseServlet {
 		WriteResultToClient.WriteMethod(response, result);	
 	}
 	
+	public void findUserByUserName(HttpServletRequest request,HttpServletResponse response){
+		String username=request.getParameter("username");
+		Result result=userDao.findUserByUserName(username);
+
+		WriteResultToClient.WriteMethod(response, result);	
+	}
+	
+
+	
+		
 
 	
 	

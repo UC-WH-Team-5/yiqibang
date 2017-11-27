@@ -336,7 +336,7 @@ ul, li {
 						initialFrameHeight : 300
 					});
 					ue.setContent(comm.cContent);
-					$('#addCommModal #thumbcount').val(comm.cThumbscount);				
+					/* $('#addCommModal #thumbcount').val(comm.cThumbscount); */				
 					$('#commid').val(comm.id);
 
 				})
@@ -435,7 +435,7 @@ ul, li {
 		$.ajax({
 			url : "/yiqibang/UserServlet",
 			data : {
-				action : "GetAllUser"
+				action : "getAllUser"
 			},
 			type : "get",
 			timeout : 5000,
@@ -634,17 +634,11 @@ ul, li {
 							<div class="col-sm-9">
 								<div>
 									<script id="editor" type="text/plain"></script>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label class="col-sm-2 control-label">点赞人数</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="thumbcount" name="thumbcount"
-									placeholder="点赞人数" value=""><input type="hidden"
+								</div><input type="hidden"
 									id="commid" value="0">
 							</div>
 						</div>
+			
 						
 					</form>
 				</div>
@@ -679,16 +673,14 @@ ul, li {
 		ue.fireEvent('beforeinsertimage');
 		var userid=$("#userid").val();
 		var newsid=$("#newsid").val();
-		var thumbcount=$("#thumbcount").val();
 		var model_title = $("#myModalLabel").text();
 		var content = ue.getContent();
 		var data = {
 				userid:userid,
 				newsid:newsid,
-				thumbcount : thumbcount,
 				content:content
 		};
-		if (userid == "" || newsid == "" || thumbcount == "" ) {
+		if (userid == "" || newsid == ""  ) {
 			alert("请输入内容");
 			return;
 		}

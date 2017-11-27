@@ -296,6 +296,10 @@
       </if>
     </trim>
   </insert>
+  <update id="updateNewsViewCount" parameterType="cn.uc.yiqibang.beans.TNews">
+	      update t_news set n_readcount=#{nReadcount,jdbcType=INTEGER} 
+	      where id = #{id,jdbcType=INTEGER}
+	</update>
   <update id="updateByPrimaryKeySelective" parameterType="cn.uc.yiqibang.beans.TNews" >
     <!--
       WARNING - @mbggenerated
